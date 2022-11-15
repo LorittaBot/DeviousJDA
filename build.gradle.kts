@@ -37,6 +37,8 @@ plugins {
     id("io.codearte.nexus-staging") version "0.30.0"
     id("de.marcphilipp.nexus-publish") version "0.4.0"
     id("com.github.johnrengelman.shadow") version "7.1.2"
+    kotlin("jvm") version "1.9.23"
+    kotlin("plugin.serialization") version "1.9.23"
 }
 
 val javaVersion = JavaVersion.current()
@@ -130,6 +132,11 @@ dependencies {
         addAll(configurations["api"].allDependencies)
         addAll(configurations["implementation"].allDependencies)
         addAll(configurations["compileOnly"].allDependencies)
+
+
+        add("examplesImplementation", "ch.qos.logback:logback-classic:1.4.4")
+        add("examplesImplementation", "org.jetbrains.kotlinx:kotlinx-serialization-json:1.4.1")
+        add("examplesImplementation", "org.jetbrains.kotlinx:kotlinx-coroutines-core:1.6.4")
     }
 
     testImplementation("org.junit.jupiter:junit-jupiter:5.10.1")
