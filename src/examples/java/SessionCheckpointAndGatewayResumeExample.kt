@@ -57,6 +57,8 @@ import kotlin.concurrent.thread
  *
  * If you have noticed, this is similar to how [Discord Gateway Proxies](https://github.com/Gelbpunkt/gateway-proxy) works behind the scenes! However, in this case we don't need to keep a
  * persistent gateway connection open, nor do we need to cache the data on a different process (which would effectively 2x your memory usage).
+ *
+ * You can also make your own custom SessionControllerAdapter that prioritizes shards that are resuming, this way the chances of the session being invalidated are lower!
  */
 object SessionCheckpointAndGatewayResumeExample {
     private val logger = LoggerFactory.getLogger(SessionCheckpointAndGatewayResumeExample::class.java)
@@ -424,6 +426,8 @@ object SessionCheckpointAndGatewayResumeExample {
                             put("discriminator", user.discriminator)
                             put("avatar", user.avatarId)
                             put("public_flags", user.flagsRaw)
+                            put("bot", user.isBot)
+                            put("system", user.isSystem)
                         }
                         put("nick", member.nickname)
                         put("avatar", member.avatarId)
