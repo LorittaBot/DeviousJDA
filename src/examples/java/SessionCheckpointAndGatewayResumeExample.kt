@@ -330,6 +330,8 @@ object SessionCheckpointAndGatewayResumeExample {
                                                 put("discriminator", event.jda.selfUser.discriminator)
                                                 put("avatar", event.jda.selfUser.avatarId)
                                                 put("public_flags", event.jda.selfUser.flagsRaw)
+                                                put("bot", event.jda.selfUser.isBot)
+                                                put("system", event.jda.selfUser.isSystem)
                                             }
                                             this.putJsonObject("application") {
                                                 // This requires the verifyToken to be enabled since we need JDA to query the self user before proceeding
