@@ -327,6 +327,7 @@ object SessionCheckpointAndGatewayResumeExample {
                                             this.putJsonObject("user") {
                                                 put("id", event.jda.selfUser.idLong)
                                                 put("username", event.jda.selfUser.name)
+                                                put("global_name", event.jda.selfUser.globalName)
                                                 put("discriminator", event.jda.selfUser.discriminator)
                                                 put("avatar", event.jda.selfUser.avatarId)
                                                 put("public_flags", event.jda.selfUser.flagsRaw)
@@ -425,6 +426,7 @@ object SessionCheckpointAndGatewayResumeExample {
 
                             put("id", user.idLong)
                             put("username", user.name)
+                            put("global_name", user.globalName)
                             put("discriminator", user.discriminator)
                             put("avatar", user.avatarId)
                             put("public_flags", user.flagsRaw)
