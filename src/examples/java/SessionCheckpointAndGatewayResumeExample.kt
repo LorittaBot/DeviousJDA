@@ -9,8 +9,11 @@ import net.dv8tion.jda.api.entities.Activity
 import net.dv8tion.jda.api.entities.Guild
 import net.dv8tion.jda.api.entities.channel.ChannelFlag
 import net.dv8tion.jda.api.entities.channel.ChannelType
-import net.dv8tion.jda.api.entities.channel.attribute.IPermissionContainer
+import net.dv8tion.jda.api.entities.channel.attribute.*
 import net.dv8tion.jda.api.entities.channel.concrete.*
+import net.dv8tion.jda.api.entities.channel.middleman.AudioChannel
+import net.dv8tion.jda.api.entities.channel.middleman.MessageChannel
+import net.dv8tion.jda.api.entities.channel.middleman.StandardGuildMessageChannel
 import net.dv8tion.jda.api.entities.emoji.Emoji
 import net.dv8tion.jda.api.events.PreProcessedRawGatewayEvent
 import net.dv8tion.jda.api.events.StatusChangeEvent
@@ -479,6 +482,59 @@ object SessionCheckpointAndGatewayResumeExample {
                         put("type", channel.type.id)
                         put("guild_id", channel.guild.idLong)
                         put("name", channel.name)
+                        put("flags", ChannelFlag.getRaw(channel.flags))
+                        if (channel is IPositionableChannel) {
+                            put("position", channel.positionRaw)
+                        }
+                        if (channel is ICategorizableChannel) {
+                            put("parent_id", channel.parentCategoryIdLong)
+                        }
+                        if (channel is IAgeRestrictedChannel) {
+                            put("nsfw", channel.isNSFW)
+                        }
+                        if (channel is StandardGuildMessageChannel) {
+                            put("topic", channel.topic)
+                        }
+                        if (channel is MessageChannel) {
+                            put("last_message_id", channel.latestMessageIdLong)
+                        }
+                        if (channel is AudioChannel) {
+                            put("user_limit", channel.userLimit)
+                            put("bitrate", channel.bitrate)
+                            put("rtc_region", channel.regionRaw)
+                        }
+                        if (channel is ISlowmodeChannel) {
+                            put("rate_limit_per_user", channel.slowmode)
+                        }
+                        if (channel is IThreadContainer) {
+                            put("default_thread_rate_limit_per_user", channel.defaultThreadSlowmode)
+                        }
+                        if (channel is ForumChannel) {
+                            put("default_forum_layout", channel.defaultLayout.key)
+                        }
+                        if (channel is IPostContainer) {
+                            put("default_sort_order", channel.defaultSortOrder.key)
+                            val emoji = channel.defaultReaction
+                            if (emoji != null) {
+                                putJsonObject("default_reaction_emoji") {
+                                    put("emoji_id", if (emoji.type == Emoji.Type.CUSTOM) emoji.asCustom().idLong else null)
+                                    put("emoji_name", if (emoji.type == Emoji.Type.UNICODE) emoji.asUnicode().name else null)
+                                }
+                            }
+
+                            putJsonArray("available_tags") {
+                                for (tag in channel.availableTags) {
+                                    addJsonObject {
+                                        put("id", tag.idLong)
+                                        put("name", tag.name)
+                                        put("moderated", tag.isModerated)
+                                        put("emoji_id", if (emoji?.type == Emoji.Type.CUSTOM) emoji.asCustom().idLong else null)
+                                        put("emoji_name", if (emoji?.type == Emoji.Type.UNICODE) emoji.asUnicode().name else null)
+                                    }
+                                }
+                            }
+                        }
+
                         if (channel is IPermissionContainer) {
                             putJsonArray("permission_overwrites") {
                                 for (permissionOverwrite in channel.permissionOverrides) {
@@ -489,74 +545,6 @@ object SessionCheckpointAndGatewayResumeExample {
                                         put("deny", permissionOverwrite.deniedRaw)
                                     }
                                 }
-                            }
-                        }
-
-                        when (channel) {
-                            is TextChannel -> {
-                                put("parent_id", channel.parentCategoryIdLong)
-                                put("last_message_id", channel.latestMessageIdLong)
-                                put("topic", channel.topic)
-                                put("position", channel.positionRaw)
-                                put("nsfw", channel.isNSFW)
-                                put("default_thread_rate_limit_per_user", channel.defaultThreadSlowmode)
-                                put("rate_limit_per_user", channel.slowmode)
-                            }
-                            is VoiceChannel -> {
-                                put("parent_id", channel.parentCategoryIdLong)
-                                put("last_message_id", channel.latestMessageIdLong)
-                                put("user_limit", channel.userLimit)
-                                put("position", channel.positionRaw)
-                                put("nsfw", channel.isNSFW)
-                                put("bitrate", channel.bitrate)
-                                put("rtc_region", channel.regionRaw)
-                            }
-                            is Category -> {
-                                put("position", channel.positionRaw)
-                            }
-                            is NewsChannel -> {
-                                put("parent_id", channel.parentCategoryIdLong)
-                                put("last_message_id", channel.latestMessageIdLong)
-                                put("topic", channel.topic)
-                                put("position", channel.positionRaw)
-                                put("nsfw", channel.isNSFW)
-                            }
-                            is StageChannel -> {
-                                put("parent_id", channel.parentCategoryIdLong)
-                                put("position", channel.positionRaw)
-                                put("bitrate", channel.positionRaw)
-                                put("rtc_region", channel.regionRaw)
-                            }
-                            is ForumChannel -> {
-                                put("parent_id", channel.parentCategoryIdLong)
-                                put("flags", ChannelFlag.getRaw(channel.flags))
-                                val emoji = channel.defaultReaction
-                                if (emoji != null) {
-                                    putJsonObject("default_reaction_emoji") {
-                                        put("emoji_id", if (emoji.type == Emoji.Type.CUSTOM) emoji.asCustom().idLong else null)
-                                        put("emoji_name", if (emoji.type == Emoji.Type.UNICODE) emoji.asUnicode().name else null)
-                                    }
-                                }
-                                put("topic", channel.topic)
-                                put("position", channel.positionRaw)
-                                put("default_thread_rate_limit_per_user", channel.defaultThreadSlowmode)
-                                put("rate_limit_per_user", channel.slowmode)
-                                put("nsfw", channel.isNSFW)
-
-                                putJsonArray("available_tags") {
-                                    for (tag in channel.availableTags) {
-                                        addJsonObject {
-                                            put("id", tag.idLong)
-                                            put("name", tag.name)
-                                            put("moderated", tag.isModerated)
-                                            put("emoji_id", if (emoji?.type == Emoji.Type.CUSTOM) emoji.asCustom().idLong else null)
-                                            put("emoji_name", if (emoji?.type == Emoji.Type.UNICODE) emoji.asUnicode().name else null)
-                                        }
-                                    }
-                                }
-                            }
-                            else -> {
-                                logger.info("I don't know how to handle a ${channel::class.simpleName} channel!")
                             }
                         }
                     }
@@ -573,7 +561,7 @@ object SessionCheckpointAndGatewayResumeExample {
                         put("owner_id", channel.ownerIdLong)
                         put("member_count", channel.memberCount)
                         put("message_count", channel.messageCount)
-                        put("total_message_count", channel.totalMessageCount)
+                        put("total_message_sent", channel.totalMessageCount)
                         put("last_message_id", channel.latestMessageIdLong)
                         put("rate_limit_per_user", channel.slowmode)
                         putJsonObject("thread_metadata") {
@@ -583,7 +571,7 @@ object SessionCheckpointAndGatewayResumeExample {
                                 put("invitable", channel.isInvitable)
                             put("archive_timestamp", formatIso(channel.timeArchiveInfoLastModified))
                             put("create_timestamp", formatIso(channel.timeCreated))
-                            put("auto_archive_duration", channel.autoArchiveDuration?.minutes)
+                            put("auto_archive_duration", channel.autoArchiveDuration.minutes)
                         }
                     }
                 }
