@@ -41,8 +41,9 @@ public class MessageContextInteractionImpl extends ContextInteractionImpl<Messag
         {
             long guildId = interaction.getUnsignedLong("guild_id");
             guild = api.getGuildById(guildId);
-            if (guild == null)
-                throw new IllegalStateException("Cannot find guild for resolved message object.");
+            // TODO: Check if the guild is authorized in "authorizing_integration_owners", if yes, then this should NOT be null and should throw
+            // if (guild == null)
+            //     throw new IllegalStateException("Cannot find guild for resolved message object.");
         }
 
         return api.getEntityBuilder().createMessageWithLookup(message, guild, false);

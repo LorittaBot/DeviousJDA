@@ -65,17 +65,19 @@ public class InteractionCreateHandler extends SocketHandler
         Guild guild = api.getGuildById(guildId);
         if (api.getGuildSetupController().isLocked(guildId))
             return guildId;
-        if (guildId != 0 && guild == null)
-            return null; // discard event if it is not from a guild we are currently in
+        // Don't discard - Interactions with user installed bots may happen in guilds that we aren't in
+        // if (guildId != 0 && guild == null)
+        //     return null; // discard event if it is not from a guild we are currently in
 
         // Check channel type
         DataObject channelJson = content.getObject("channel");
         ChannelType channelType = ChannelType.fromId(channelJson.getInt("type"));
-        if (!channelType.isMessage() || channelType == ChannelType.GROUP)
-        {
-            WebSocketClient.LOG.debug("Discarding INTERACTION_CREATE event from unexpected channel type. Channel: {}", channelJson);
-            return null;
-        }
+        // Don't discard - Interactions with user installed bots may happen in GDMs
+        // if (!channelType.isMessage() || channelType == ChannelType.GROUP)
+        // {
+        //     WebSocketClient.LOG.debug("Discarding INTERACTION_CREATE event from unexpected channel type. Channel: {}", channelJson);
+        //     return null;
+        // }
 
         switch (InteractionType.fromKey(type))
         {

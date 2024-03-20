@@ -29,6 +29,7 @@ import net.dv8tion.jda.internal.utils.localization.LocalizationUtils;
 
 import javax.annotation.Nonnull;
 import java.util.Collection;
+import java.util.EnumSet;
 import java.util.Map;
 
 /**
@@ -167,6 +168,12 @@ public interface CommandData extends SerializableData
     @Nonnull
     CommandData setNSFW(boolean nsfw);
 
+    @Nonnull
+    CommandData setIntegrationTypes(@Nonnull Command.IntegrationType integrationType, @Nonnull Command.IntegrationType... integrationTypes);
+
+    @Nonnull
+    CommandData setInteractionContextTypes(@Nonnull Command.InteractionContextType interactionContextType, @Nonnull Command.InteractionContextType... interactionContextTypes);
+
     /**
      * The current command name
      *
@@ -202,6 +209,12 @@ public interface CommandData extends SerializableData
      */
     @Nonnull
     DefaultMemberPermissions getDefaultPermissions();
+
+    @Nonnull
+    EnumSet<Command.IntegrationType> getIntegrationTypes();
+
+    @Nonnull
+    EnumSet<Command.InteractionContextType> getInteractionContextTypes();
 
     /**
      * Whether the command can only be used inside a guild.

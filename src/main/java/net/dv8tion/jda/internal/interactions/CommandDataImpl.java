@@ -29,10 +29,12 @@ import net.dv8tion.jda.api.utils.data.SerializableData;
 import net.dv8tion.jda.internal.interactions.command.localization.LocalizationMapper;
 import net.dv8tion.jda.internal.utils.Checks;
 import net.dv8tion.jda.internal.utils.Helpers;
+import org.jetbrains.annotations.NotNull;
 
 import javax.annotation.Nonnull;
 import java.util.*;
 import java.util.function.Predicate;
+import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 public class CommandDataImpl implements SlashCommandData
@@ -50,6 +52,9 @@ public class CommandDataImpl implements SlashCommandData
     private boolean guildOnly = false;
     private boolean nsfw = false;
     private DefaultMemberPermissions defaultMemberPermissions = DefaultMemberPermissions.ENABLED;
+    private EnumSet<Command.IntegrationType> integrationTypes = EnumSet.of(Command.IntegrationType.GUILD_INSTALL);
+    // TODO: This is actually not "all", the docs says that it registers all contexts by default but in my experience that's not what happens
+    private EnumSet<Command.InteractionContextType> contexts = EnumSet.of(Command.InteractionContextType.GUILD, Command.InteractionContextType.BOT_DM, Command.InteractionContextType.PRIVATE_CHANNEL);
 
     private final Command.Type type;
 
@@ -108,7 +113,9 @@ public class CommandDataImpl implements SlashCommandData
                 .put("default_member_permissions", defaultMemberPermissions == DefaultMemberPermissions.ENABLED
                         ? null
                         : Long.toUnsignedString(defaultMemberPermissions.getPermissionsRaw()))
-                .put("name_localizations", nameLocalizations);
+                .put("name_localizations", nameLocalizations)
+                .put("integration_types", DataArray.fromCollection(integrationTypes.stream().map(Command.IntegrationType::getId).collect(Collectors.toList())))
+                .put("contexts", DataArray.fromCollection(contexts.stream().map(Command.InteractionContextType::getId).collect(Collectors.toList())));
 
         if (type == Command.Type.SLASH)
         {
@@ -130,6 +137,20 @@ public class CommandDataImpl implements SlashCommandData
     public DefaultMemberPermissions getDefaultPermissions()
     {
         return defaultMemberPermissions;
+    }
+
+    @NotNull
+    @Override
+    public EnumSet<Command.IntegrationType> getIntegrationTypes()
+    {
+        return EnumSet.copyOf(integrationTypes);
+    }
+
+    @NotNull
+    @Override
+    public EnumSet<Command.InteractionContextType> getInteractionContextTypes()
+    {
+        return EnumSet.copyOf(contexts);
     }
 
     @Override
@@ -196,6 +217,28 @@ public class CommandDataImpl implements SlashCommandData
     public CommandDataImpl setNSFW(boolean nsfw)
     {
         this.nsfw = nsfw;
+        return this;
+    }
+
+    @Nonnull
+    @Override
+    public CommandData setIntegrationTypes(@Nonnull Command.IntegrationType integrationType, @Nonnull Command.IntegrationType... integrationTypes)
+    {
+        Checks.notNull(integrationType, "Integration Type");
+        Checks.noneNull(integrationTypes, "Integration Type");
+        EnumSet<Command.IntegrationType> set = EnumSet.of(integrationType, integrationTypes);
+        this.integrationTypes = set;
+        return this;
+    }
+
+    @Nonnull
+    @Override
+    public CommandData setInteractionContextTypes(@Nonnull Command.InteractionContextType interactionContextType, @Nonnull Command.InteractionContextType... interactionContextTypes)
+    {
+        Checks.notNull(interactionContextType, "Interaction Context Type");
+        Checks.noneNull(interactionContextTypes, "Interaction Context Type");
+        EnumSet<Command.InteractionContextType> set = EnumSet.of(interactionContextType, interactionContextTypes);
+        this.contexts = set;
         return this;
     }
 

@@ -63,7 +63,8 @@ public class InteractionImpl implements Interaction
         this.id = data.getUnsignedLong("id");
         this.token = data.getString("token");
         this.type = data.getInt("type");
-        this.guild = jda.getGuildById(data.getUnsignedLong("guild_id", 0L));
+        long guildId = data.getUnsignedLong("guild_id", 0L);
+        this.guild = jda.getGuildById(guildId);
         this.channelId = data.getUnsignedLong("channel_id", 0L);
         this.userLocale = DiscordLocale.from(data.getString("locale", "en-US"));
 
@@ -81,22 +82,48 @@ public class InteractionImpl implements Interaction
                 throw new IllegalStateException("Failed to create channel instance for interaction! Channel Type: " + channelJson.getInt("type"));
             this.channel = channel;
         }
-        else
-        {
+        else if (guildId != 0L) {
+            // User installed application in a guild
+            this.member = null;
+            long channelId = channelJson.getUnsignedLong("id");
+
+            // Let's pretend that this is a private channel, in reality this is a guild channel in a guild that we aren't in
+            DataObject memberData = data.getObject("member");
+            DataObject userData = memberData.getObject("user");
+            // We DO NOT WANT to cache this channel AT ALL to avoid issues with clashing IDs and wrong recipients
+            // (the wrong recipients may happen if we reuse the same channel ID, which the bot will use the already created channel)
+            PrivateChannel channel = jda.getEntityBuilder().createPrivateChannel(
+                    DataObject.empty()
+                            .put("id", channelId)
+                            .put("recipient", userData),
+                    null,
+                    false
+            );
+            this.channel = channel;
+
+            User user = channel.getUser();
+            if (user == null)
+            {
+                user = jda.getEntityBuilder().createUser(userData);
+                ((PrivateChannelImpl) channel).setUser(user);
+                ((UserImpl) user).setPrivateChannel(channel);
+            }
+            this.user = user;
+        } else {
             member = null;
             long channelId = channelJson.getUnsignedLong("id");
-            ChannelType type = ChannelType.fromId(channelJson.getInt("type"));
-            if (type != ChannelType.PRIVATE)
-                throw new IllegalArgumentException("Received interaction in unexpected channel type! Type " + type + " is not supported yet!");
-            PrivateChannel channel = jda.getPrivateChannelById(channelId);
-            if (channel == null)
-            {
-                channel = jda.getEntityBuilder().createPrivateChannel(
+            // ChannelType type = ChannelType.fromId(channelJson.getInt("type"));
+            // if (type != ChannelType.PRIVATE)
+            //     throw new IllegalArgumentException("Received interaction in unexpected channel type! Type " + type + " is not supported yet!");
+            // We DO NOT WANT to cache this channel AT ALL to avoid issues with clashing IDs and wrong recipients
+            // (the wrong recipients may happen if we reuse the same channel ID, which the bot will use the already created channel)
+            PrivateChannel channel = jda.getEntityBuilder().createPrivateChannel(
                     DataObject.empty()
-                        .put("id", channelId)
-                        .put("recipient", data.getObject("user"))
-                );
-            }
+                            .put("id", channelId)
+                            .put("recipient", data.getObject("user")),
+                    null,
+                    false
+            );
             this.channel = channel;
 
             User user = channel.getUser();

@@ -284,6 +284,67 @@ public interface Command extends ISnowflake, ICommandReference
         }
     }
 
+    enum IntegrationType
+    {
+        UNKNOWN(-1),
+        GUILD_INSTALL(0),
+        USER_INSTALL(1);
+
+        private final int id;
+
+        IntegrationType(int id)
+        {
+            this.id = id;
+        }
+
+        @Nonnull
+        public static IntegrationType fromId(int id)
+        {
+            for (IntegrationType type : values())
+            {
+                if (type.id == id)
+                    return type;
+            }
+            return UNKNOWN;
+        }
+
+        public int getId()
+        {
+            return id;
+        }
+    }
+
+    enum InteractionContextType
+    {
+        UNKNOWN(-1),
+        GUILD(0),
+        BOT_DM(1),
+        PRIVATE_CHANNEL(2);
+
+        private final int id;
+
+        InteractionContextType(int id)
+        {
+            this.id = id;
+        }
+
+        @Nonnull
+        public static InteractionContextType fromId(int id)
+        {
+            for (InteractionContextType type : values())
+            {
+                if (type.id == id)
+                    return type;
+            }
+            return UNKNOWN;
+        }
+
+        public int getId()
+        {
+            return id;
+        }
+    }
+
     /**
      * Predefined choice used for options.
      *

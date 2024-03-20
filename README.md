@@ -21,6 +21,8 @@ Keep in mind that this repo is constantly `git reset --hard`'d, we always reset 
 * Added `JDA#shutdown(closeCode)` and `JDA#shutdownNow(closeCode)`, which is useful if you want to shutdown the WebSocket but don't want to invalidate your current session.
 * Added `getId()` to `StickerFormat`
 * Changed `WebSocketClient#handleEvent` from `protected` to `public`
+* Hacky User Installable Apps support
+    * This is a prototype only for fun, a lot of checks were removed and user installable apps when used in a guild that doesn't have the bot just acts like it is a private channel. Use `setIntegrationTypes(...)` and `setInteractionContextTypes(...)` when registering a command to enable commands in DM and group DMs.
 
 ## 👀 Examples
 

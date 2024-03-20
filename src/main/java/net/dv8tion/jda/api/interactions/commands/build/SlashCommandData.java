@@ -28,9 +28,11 @@ import net.dv8tion.jda.api.utils.data.DataObject;
 import net.dv8tion.jda.internal.interactions.CommandDataImpl;
 import net.dv8tion.jda.internal.utils.Checks;
 import net.dv8tion.jda.internal.utils.localization.LocalizationUtils;
+import org.jetbrains.annotations.NotNull;
 
 import javax.annotation.Nonnull;
 import java.util.Collection;
+import java.util.EnumSet;
 import java.util.List;
 import java.util.Map;
 import java.util.function.Predicate;
@@ -122,6 +124,14 @@ public interface SlashCommandData extends CommandData
     @Nonnull
     SlashCommandData setDescriptionLocalizations(@Nonnull Map<DiscordLocale, String> map);
 
+    @Nonnull
+    @Override
+    CommandData setIntegrationTypes(@Nonnull Command.IntegrationType integrationType, @Nonnull Command.IntegrationType... integrationTypes);
+
+    @Nonnull
+    @Override
+    CommandData setInteractionContextTypes(@Nonnull Command.InteractionContextType interactionContextType, @Nonnull Command.InteractionContextType... interactionContextTypes);
+
     /**
      * The configured description
      *
@@ -137,6 +147,14 @@ public interface SlashCommandData extends CommandData
      */
     @Nonnull
     LocalizationMap getDescriptionLocalizations();
+
+    @Nonnull
+    @Override
+    EnumSet<Command.IntegrationType> getIntegrationTypes();
+
+    @Nonnull
+    @Override
+    EnumSet<Command.InteractionContextType> getInteractionContextTypes();
 
     /**
      * Removes all options that evaluate to {@code true} under the provided {@code condition}.

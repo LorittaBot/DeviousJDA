@@ -1509,6 +1509,11 @@ public class EntityBuilder
 
     public PrivateChannel createPrivateChannel(DataObject json, UserImpl user)
     {
+        return createPrivateChannel(json, user, true);
+    }
+
+    public PrivateChannel createPrivateChannel(DataObject json, UserImpl user, boolean addChannelToCache)
+    {
         final long channelId = json.getUnsignedLong("id");
         PrivateChannelImpl channel = (PrivateChannelImpl) api.getPrivateChannelById(channelId);
         if (channel == null)
@@ -1542,9 +1547,12 @@ public class EntityBuilder
         {
             recipient.setPrivateChannel(channel);
         }
-        // only add channels to the cache when they come from an event, otherwise we would never remove the channel
-        cachePrivateChannel(channel);
-        api.usedPrivateChannel(channelId);
+        if (addChannelToCache)
+        {
+            // only add channels to the cache when they come from an event, otherwise we would never remove the channel
+            cachePrivateChannel(channel);
+            api.usedPrivateChannel(channelId);
+        }
         return channel;
     }
 
@@ -1696,7 +1704,8 @@ public class EntityBuilder
                 channelData.put("recipient", author);
 
             //even without knowing the user at the other end, we can still construct a minimal channel
-            channel = (PrivateChannelImpl) createPrivateChannel(channelData);
+            // We do not want to add the channel to the cache, if we do, this will cause recipient issues when using components in group DMs
+            channel = (PrivateChannelImpl) createPrivateChannel(channelData, null, false);
         }
         else if (channel.getUser() == null && isRecipient)
         {

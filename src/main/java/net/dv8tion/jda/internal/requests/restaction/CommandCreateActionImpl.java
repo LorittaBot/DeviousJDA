@@ -19,6 +19,7 @@ import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.interactions.DiscordLocale;
 import net.dv8tion.jda.api.interactions.commands.Command;
 import net.dv8tion.jda.api.interactions.commands.DefaultMemberPermissions;
+import net.dv8tion.jda.api.interactions.commands.build.CommandData;
 import net.dv8tion.jda.api.interactions.commands.build.OptionData;
 import net.dv8tion.jda.api.interactions.commands.build.SubcommandData;
 import net.dv8tion.jda.api.interactions.commands.build.SubcommandGroupData;
@@ -36,6 +37,7 @@ import net.dv8tion.jda.internal.requests.RestActionImpl;
 import okhttp3.RequestBody;
 
 import javax.annotation.Nonnull;
+import java.util.EnumSet;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
@@ -211,6 +213,22 @@ public class CommandCreateActionImpl extends RestActionImpl<Command> implements 
 
     @Nonnull
     @Override
+    public CommandData setIntegrationTypes(@Nonnull Command.IntegrationType integrationType, @Nonnull Command.IntegrationType... integrationTypes)
+    {
+        data.setIntegrationTypes(integrationType, integrationTypes);
+        return this;
+    }
+
+    @Nonnull
+    @Override
+    public CommandData setInteractionContextTypes(@Nonnull Command.InteractionContextType interactionContextType, @Nonnull Command.InteractionContextType... interactionContextTypes)
+    {
+        data.setInteractionContextTypes(interactionContextType, interactionContextTypes);
+        return this;
+    }
+
+    @Nonnull
+    @Override
     public String getDescription()
     {
         return data.getDescription();
@@ -221,6 +239,20 @@ public class CommandCreateActionImpl extends RestActionImpl<Command> implements 
     public LocalizationMap getDescriptionLocalizations()
     {
         return data.getDescriptionLocalizations();
+    }
+
+    @Nonnull
+    @Override
+    public EnumSet<Command.IntegrationType> getIntegrationTypes()
+    {
+        return data.getIntegrationTypes();
+    }
+
+    @Nonnull
+    @Override
+    public EnumSet<Command.InteractionContextType> getInteractionContextTypes()
+    {
+        return data.getInteractionContextTypes();
     }
 
     @Override
