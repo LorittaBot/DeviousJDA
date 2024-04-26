@@ -81,7 +81,7 @@ public interface StageChannel extends StandardGuildChannel, GuildMessageChannel,
      * @throws IllegalArgumentException
      *         If the topic is null, empty, or longer than 120 characters
      * @throws net.dv8tion.jda.api.exceptions.DetachedEntityException
-     *         if the bot isn't in the guild.
+     *         if the bot {@link Guild#isDetached() isn't in the guild}.
      *
      * @return {@link StageInstanceAction}
      */
@@ -150,7 +150,7 @@ public interface StageChannel extends StandardGuildChannel, GuildMessageChannel,
      * @throws IllegalStateException
      *         If the self member is not currently connected to the channel
      * @throws net.dv8tion.jda.api.exceptions.DetachedEntityException
-     *         if the bot isn't in the guild.
+     *         if the bot {@link Guild#isDetached() isn't in the guild}.
      *
      * @return {@link RestAction}
      *
@@ -169,7 +169,7 @@ public interface StageChannel extends StandardGuildChannel, GuildMessageChannel,
      * @throws IllegalStateException
      *         If the self member is not currently connected to the channel
      * @throws net.dv8tion.jda.api.exceptions.DetachedEntityException
-     *         if the bot isn't in the guild.
+     *         if the bot {@link Guild#isDetached() isn't in the guild}.
      *
      * @return {@link RestAction}
      *
