@@ -141,7 +141,7 @@ public interface MessageChannel extends Channel, Formattable
      * <br>For {@link GroupChannel} this method returns false.
      *
      * @throws net.dv8tion.jda.api.exceptions.DetachedEntityException
-     *         if the bot isn't in the guild.
+     *         if the bot {@link Guild#isDetached() isn't in the guild}.
      *
      * @return True, if we are able to read and send messages in this channel
      */
@@ -159,7 +159,7 @@ public interface MessageChannel extends Channel, Formattable
      *         The message ids to delete
      *
      * @throws net.dv8tion.jda.api.exceptions.DetachedEntityException
-     *         if the bot isn't in the guild.
+     *         if the bot {@link Guild#isDetached() isn't in the guild}.
      *
      * @return List of futures representing all deletion tasks
      *
@@ -188,7 +188,7 @@ public interface MessageChannel extends Channel, Formattable
      *         The message ids to delete
      *
      * @throws net.dv8tion.jda.api.exceptions.DetachedEntityException
-     *         if the bot isn't in the guild.
+     *         if the bot {@link Guild#isDetached() isn't in the guild}.
      *
      * @return List of futures representing all deletion tasks
      *
@@ -218,7 +218,7 @@ public interface MessageChannel extends Channel, Formattable
      * @throws IllegalArgumentException
      *         If one of the provided messages is from another user and cannot be deleted because this is not in a guild
      * @throws net.dv8tion.jda.api.exceptions.DetachedEntityException
-     *         if the bot isn't in the guild.
+     *         if the bot {@link Guild#isDetached() isn't in the guild}.
      *
      * @return List of futures representing all deletion tasks
      *
@@ -250,7 +250,7 @@ public interface MessageChannel extends Channel, Formattable
      * @throws IllegalArgumentException
      *         If one of the provided messages is from another user and cannot be deleted because this is not in a guild
      * @throws net.dv8tion.jda.api.exceptions.DetachedEntityException
-     *         if the bot isn't in the guild.
+     *         if the bot {@link Guild#isDetached() isn't in the guild}.
      *
      * @return List of futures representing all deletion tasks
      *
@@ -293,7 +293,7 @@ public interface MessageChannel extends Channel, Formattable
      *         The message ids to delete
      *
      * @throws net.dv8tion.jda.api.exceptions.DetachedEntityException
-     *         if the bot isn't in the guild.
+     *         if the bot {@link Guild#isDetached() isn't in the guild}.
      *
      * @return List of futures representing all deletion tasks
      *
@@ -343,7 +343,7 @@ public interface MessageChannel extends Channel, Formattable
      *         If this is a {@link GuildMessageChannel} and this account does not have
      *         {@link net.dv8tion.jda.api.Permission#VIEW_CHANNEL Permission.VIEW_CHANNEL} or {@link net.dv8tion.jda.api.Permission#MESSAGE_SEND Permission.MESSAGE_SEND}
      * @throws net.dv8tion.jda.api.exceptions.DetachedEntityException
-     *         if the bot isn't in the guild.
+     *         if the bot {@link Guild#isDetached() isn't in the guild}.
      *
      * @return {@link MessageCreateAction}
      */
@@ -385,7 +385,7 @@ public interface MessageChannel extends Channel, Formattable
      *         If this is a {@link GuildMessageChannel} and this account does not have
      *         {@link net.dv8tion.jda.api.Permission#VIEW_CHANNEL Permission.VIEW_CHANNEL} or {@link net.dv8tion.jda.api.Permission#MESSAGE_SEND Permission.MESSAGE_SEND}
      * @throws net.dv8tion.jda.api.exceptions.DetachedEntityException
-     *         if the bot isn't in the guild.
+     *         if the bot {@link Guild#isDetached() isn't in the guild}.
      *
      * @return {@link MessageCreateAction}
      *
@@ -438,7 +438,7 @@ public interface MessageChannel extends Channel, Formattable
      *         formatting errors, see the <a href="../util/Formatter.html#detail">Details</a> section of the
      *         formatter class specification.
      * @throws net.dv8tion.jda.api.exceptions.DetachedEntityException
-     *         if the bot isn't in the guild.
+     *         if the bot {@link Guild#isDetached() isn't in the guild}.
      *
      * @return {@link MessageCreateAction}
      */
@@ -500,7 +500,7 @@ public interface MessageChannel extends Channel, Formattable
      *         If this is a {@link GuildMessageChannel} and this account does not have
      *         {@link net.dv8tion.jda.api.Permission#VIEW_CHANNEL Permission.VIEW_CHANNEL} or {@link net.dv8tion.jda.api.Permission#MESSAGE_SEND Permission.MESSAGE_SEND}
      * @throws net.dv8tion.jda.api.exceptions.DetachedEntityException
-     *         if the bot isn't in the guild.
+     *         if the bot {@link Guild#isDetached() isn't in the guild}.
      *
      * @return {@link MessageCreateAction}
      */
@@ -564,7 +564,7 @@ public interface MessageChannel extends Channel, Formattable
      *         If this is a {@link GuildMessageChannel} and this account does not have
      *         {@link net.dv8tion.jda.api.Permission#VIEW_CHANNEL Permission.VIEW_CHANNEL} or {@link net.dv8tion.jda.api.Permission#MESSAGE_SEND Permission.MESSAGE_SEND}
      * @throws net.dv8tion.jda.api.exceptions.DetachedEntityException
-     *         if the bot isn't in the guild.
+     *         if the bot {@link Guild#isDetached() isn't in the guild}.
      *
      * @return {@link MessageCreateAction}
      */
@@ -607,7 +607,7 @@ public interface MessageChannel extends Channel, Formattable
      *         If this is a {@link GuildMessageChannel} and this account does not have
      *         {@link net.dv8tion.jda.api.Permission#VIEW_CHANNEL Permission.VIEW_CHANNEL} or {@link net.dv8tion.jda.api.Permission#MESSAGE_SEND Permission.MESSAGE_SEND}
      * @throws net.dv8tion.jda.api.exceptions.DetachedEntityException
-     *         if the bot isn't in the guild.
+     *         if the bot {@link Guild#isDetached() isn't in the guild}.
      *
      * @return {@link MessageCreateAction}
      */
@@ -671,7 +671,7 @@ public interface MessageChannel extends Channel, Formattable
      *         If this is a {@link GuildMessageChannel} and this account does not have
      *         {@link net.dv8tion.jda.api.Permission#VIEW_CHANNEL Permission.VIEW_CHANNEL} or {@link net.dv8tion.jda.api.Permission#MESSAGE_SEND Permission.MESSAGE_SEND}
      * @throws net.dv8tion.jda.api.exceptions.DetachedEntityException
-     *         if the bot isn't in the guild.
+     *         if the bot {@link Guild#isDetached() isn't in the guild}.
      *
      * @return {@link MessageCreateAction}
      */
@@ -784,7 +784,7 @@ public interface MessageChannel extends Channel, Formattable
      *         If this is a {@link GuildMessageChannel} and this account does not have
      *         {@link net.dv8tion.jda.api.Permission#VIEW_CHANNEL Permission.VIEW_CHANNEL} or {@link net.dv8tion.jda.api.Permission#MESSAGE_SEND Permission.MESSAGE_SEND}
      * @throws net.dv8tion.jda.api.exceptions.DetachedEntityException
-     *         if the bot isn't in the guild.
+     *         if the bot {@link Guild#isDetached() isn't in the guild}.
      *
      * @return {@link MessageCreateAction}
      *
@@ -855,7 +855,7 @@ public interface MessageChannel extends Channel, Formattable
      *         If this is a {@link GuildMessageChannel} and this account does not have
      *         {@link net.dv8tion.jda.api.Permission#VIEW_CHANNEL Permission.VIEW_CHANNEL} or {@link net.dv8tion.jda.api.Permission#MESSAGE_SEND Permission.MESSAGE_SEND}
      * @throws net.dv8tion.jda.api.exceptions.DetachedEntityException
-     *         if the bot isn't in the guild.
+     *         if the bot {@link Guild#isDetached() isn't in the guild}.
      *
      * @return {@link MessageCreateAction}
      *
@@ -908,7 +908,7 @@ public interface MessageChannel extends Channel, Formattable
      *             <li>{@link net.dv8tion.jda.api.Permission#MESSAGE_HISTORY Permission.MESSAGE_HISTORY}</li>
      *         </ul>
      * @throws net.dv8tion.jda.api.exceptions.DetachedEntityException
-     *         if the bot isn't in the guild.
+     *         if the bot {@link Guild#isDetached() isn't in the guild}.
      *
      * @return {@link net.dv8tion.jda.api.requests.RestAction RestAction} - Type: Message
      *         <br>The Message defined by the provided id.
@@ -961,7 +961,7 @@ public interface MessageChannel extends Channel, Formattable
      *             <li>{@link net.dv8tion.jda.api.Permission#MESSAGE_HISTORY Permission.MESSAGE_HISTORY}</li>
      *         </ul>
      * @throws net.dv8tion.jda.api.exceptions.DetachedEntityException
-     *         if the bot isn't in the guild.
+     *         if the bot {@link Guild#isDetached() isn't in the guild}.
      *
      * @return {@link net.dv8tion.jda.api.requests.RestAction RestAction} - Type: Message
      *         <br>The Message defined by the provided id.
@@ -1008,7 +1008,7 @@ public interface MessageChannel extends Channel, Formattable
      *         If this is a {@link GuildMessageChannel GuildMessageChannel} and the logged in account does not have
      *         {@link net.dv8tion.jda.api.Permission#VIEW_CHANNEL Permission.VIEW_CHANNEL}.
      * @throws net.dv8tion.jda.api.exceptions.DetachedEntityException
-     *         if the bot isn't in the guild.
+     *         if the bot {@link Guild#isDetached() isn't in the guild}.
      *
      * @return {@link net.dv8tion.jda.api.requests.RestAction RestAction} - Type: Void
      */
@@ -1057,7 +1057,7 @@ public interface MessageChannel extends Channel, Formattable
      *         If this is a {@link GuildMessageChannel GuildMessageChannel} and the logged in account does not have
      *         {@link net.dv8tion.jda.api.Permission#VIEW_CHANNEL Permission.VIEW_CHANNEL}.
      * @throws net.dv8tion.jda.api.exceptions.DetachedEntityException
-     *         if the bot isn't in the guild.
+     *         if the bot {@link Guild#isDetached() isn't in the guild}.
      *
      * @return {@link net.dv8tion.jda.api.requests.RestAction RestAction} - Type: Void
      */
@@ -1178,7 +1178,7 @@ public interface MessageChannel extends Channel, Formattable
      *         If this is a {@link GuildMessageChannel GuildMessageChannel}
      *         and the currently logged in account does not have the permission {@link net.dv8tion.jda.api.Permission#MESSAGE_HISTORY MESSAGE_HISTORY}
      * @throws net.dv8tion.jda.api.exceptions.DetachedEntityException
-     *         if the bot isn't in the guild.
+     *         if the bot {@link Guild#isDetached() isn't in the guild}.
      *
      * @return A {@link net.dv8tion.jda.api.entities.MessageHistory MessageHistory} related to this channel.
      */
@@ -1214,7 +1214,7 @@ public interface MessageChannel extends Channel, Formattable
      *         If this is a {@link GuildMessageChannel GuildMessageChannel}
      *         and the currently logged in account does not have the permission {@link net.dv8tion.jda.api.Permission#MESSAGE_HISTORY MESSAGE_HISTORY}
      * @throws net.dv8tion.jda.api.exceptions.DetachedEntityException
-     *         if the bot isn't in the guild.
+     *         if the bot {@link Guild#isDetached() isn't in the guild}.
      *
      * @return {@link MessagePaginationAction MessagePaginationAction}
      */
@@ -1279,7 +1279,7 @@ public interface MessageChannel extends Channel, Formattable
      *             <li>{@link net.dv8tion.jda.api.Permission#MESSAGE_HISTORY Permission.MESSAGE_HISTORY}</li>
      *         </ul>
      * @throws net.dv8tion.jda.api.exceptions.DetachedEntityException
-     *         if the bot isn't in the guild.
+     *         if the bot {@link Guild#isDetached() isn't in the guild}.
      *
      * @return {@link net.dv8tion.jda.api.entities.MessageHistory.MessageRetrieveAction MessageHistory.MessageRetrieveAction}
      *         <br>Provides a {@link net.dv8tion.jda.api.entities.MessageHistory MessageHistory} object with messages around the provided message loaded into it.
@@ -1347,7 +1347,7 @@ public interface MessageChannel extends Channel, Formattable
      *             <li>{@link net.dv8tion.jda.api.Permission#MESSAGE_HISTORY Permission.MESSAGE_HISTORY}</li>
      *         </ul>
      * @throws net.dv8tion.jda.api.exceptions.DetachedEntityException
-     *         if the bot isn't in the guild.
+     *         if the bot {@link Guild#isDetached() isn't in the guild}.
      *
      * @return {@link net.dv8tion.jda.api.entities.MessageHistory.MessageRetrieveAction MessageHistory.MessageRetrieveAction}
      *         <br>Provides a {@link net.dv8tion.jda.api.entities.MessageHistory MessageHistory} object with messages around the provided message loaded into it.
@@ -1415,7 +1415,7 @@ public interface MessageChannel extends Channel, Formattable
      *             <li>{@link net.dv8tion.jda.api.Permission#MESSAGE_HISTORY Permission.MESSAGE_HISTORY}</li>
      *         </ul>
      * @throws net.dv8tion.jda.api.exceptions.DetachedEntityException
-     *         if the bot isn't in the guild.
+     *         if the bot {@link Guild#isDetached() isn't in the guild}.
      *
      * @return {@link net.dv8tion.jda.api.entities.MessageHistory.MessageRetrieveAction MessageHistory.MessageRetrieveAction}
      *         <br>Provides a {@link net.dv8tion.jda.api.entities.MessageHistory MessageHistory} object with messages around the provided message loaded into it.
@@ -1476,7 +1476,7 @@ public interface MessageChannel extends Channel, Formattable
      *             <li>{@link net.dv8tion.jda.api.Permission#MESSAGE_HISTORY Permission.MESSAGE_HISTORY}</li>
      *         </ul>
      * @throws net.dv8tion.jda.api.exceptions.DetachedEntityException
-     *         if the bot isn't in the guild.
+     *         if the bot {@link Guild#isDetached() isn't in the guild}.
      *
      * @return {@link net.dv8tion.jda.api.entities.MessageHistory.MessageRetrieveAction MessageHistory.MessageRetrieveAction}
      *         <br>Provides a {@link net.dv8tion.jda.api.entities.MessageHistory MessageHistory} object with messages after the provided message loaded into it.
@@ -1533,7 +1533,7 @@ public interface MessageChannel extends Channel, Formattable
      *             <li>{@link net.dv8tion.jda.api.Permission#MESSAGE_HISTORY Permission.MESSAGE_HISTORY}</li>
      *         </ul>
      * @throws net.dv8tion.jda.api.exceptions.DetachedEntityException
-     *         if the bot isn't in the guild.
+     *         if the bot {@link Guild#isDetached() isn't in the guild}.
      *
      * @return {@link net.dv8tion.jda.api.entities.MessageHistory.MessageRetrieveAction MessageHistory.MessageRetrieveAction}
      *         <br>Provides a {@link net.dv8tion.jda.api.entities.MessageHistory MessageHistory} object with messages after the provided message loaded into it.
@@ -1593,7 +1593,7 @@ public interface MessageChannel extends Channel, Formattable
      *             <li>{@link net.dv8tion.jda.api.Permission#MESSAGE_HISTORY Permission.MESSAGE_HISTORY}</li>
      *         </ul>
      * @throws net.dv8tion.jda.api.exceptions.DetachedEntityException
-     *         if the bot isn't in the guild.
+     *         if the bot {@link Guild#isDetached() isn't in the guild}.
      *
      * @return {@link net.dv8tion.jda.api.entities.MessageHistory.MessageRetrieveAction MessageHistory.MessageRetrieveAction}
      *         <br>Provides a {@link net.dv8tion.jda.api.entities.MessageHistory MessageHistory} object with messages after the provided message loaded into it.
@@ -1654,7 +1654,7 @@ public interface MessageChannel extends Channel, Formattable
      *             <li>{@link net.dv8tion.jda.api.Permission#MESSAGE_HISTORY Permission.MESSAGE_HISTORY}</li>
      *         </ul>
      * @throws net.dv8tion.jda.api.exceptions.DetachedEntityException
-     *         if the bot isn't in the guild.
+     *         if the bot {@link Guild#isDetached() isn't in the guild}.
      *
      * @return {@link net.dv8tion.jda.api.entities.MessageHistory.MessageRetrieveAction MessageHistory.MessageRetrieveAction}
      *         <br>Provides a {@link net.dv8tion.jda.api.entities.MessageHistory MessageHistory} object with messages before the provided message loaded into it.
@@ -1714,7 +1714,7 @@ public interface MessageChannel extends Channel, Formattable
      *             <li>{@link net.dv8tion.jda.api.Permission#MESSAGE_HISTORY Permission.MESSAGE_HISTORY}</li>
      *         </ul>
      * @throws net.dv8tion.jda.api.exceptions.DetachedEntityException
-     *         if the bot isn't in the guild.
+     *         if the bot {@link Guild#isDetached() isn't in the guild}.
      *
      * @return {@link net.dv8tion.jda.api.entities.MessageHistory.MessageRetrieveAction MessageHistory.MessageRetrieveAction}
      *         <br>Provides a {@link net.dv8tion.jda.api.entities.MessageHistory MessageHistory} object with messages before the provided message loaded into it.
@@ -1774,7 +1774,7 @@ public interface MessageChannel extends Channel, Formattable
      *             <li>{@link net.dv8tion.jda.api.Permission#MESSAGE_HISTORY Permission.MESSAGE_HISTORY}</li>
      *         </ul>
      * @throws net.dv8tion.jda.api.exceptions.DetachedEntityException
-     *         if the bot isn't in the guild.
+     *         if the bot {@link Guild#isDetached() isn't in the guild}.
      *
      * @return {@link net.dv8tion.jda.api.entities.MessageHistory.MessageRetrieveAction MessageHistory.MessageRetrieveAction}
      *         <br>Provides a {@link net.dv8tion.jda.api.entities.MessageHistory MessageHistory} object with messages before the provided message loaded into it.
@@ -1838,7 +1838,7 @@ public interface MessageChannel extends Channel, Formattable
      *             <li>{@link net.dv8tion.jda.api.Permission#MESSAGE_HISTORY Permission.MESSAGE_HISTORY}</li>
      *         </ul>
      * @throws net.dv8tion.jda.api.exceptions.DetachedEntityException
-     *         if the bot isn't in the guild.
+     *         if the bot {@link Guild#isDetached() isn't in the guild}.
      *
      * @return {@link net.dv8tion.jda.api.entities.MessageHistory.MessageRetrieveAction MessageHistory.MessageRetrieveAction}
      *         <br>Provides a {@link net.dv8tion.jda.api.entities.MessageHistory MessageHistory} object with with the first messages of this channel loaded into it.
@@ -1880,7 +1880,7 @@ public interface MessageChannel extends Channel, Formattable
      *             <li>{@link net.dv8tion.jda.api.Permission#MESSAGE_SEND Permission.MESSAGE_SEND}</li>
      *         </ul>
      * @throws net.dv8tion.jda.api.exceptions.DetachedEntityException
-     *         if the bot isn't in the guild.
+     *         if the bot {@link Guild#isDetached() isn't in the guild}.
      *
      * @return {@link net.dv8tion.jda.api.requests.RestAction RestAction} - Type: Void
      */
@@ -1939,7 +1939,7 @@ public interface MessageChannel extends Channel, Formattable
      *             <li>{@link net.dv8tion.jda.api.Permission#MESSAGE_HISTORY Permission.MESSAGE_HISTORY}</li>
      *         </ul>
      * @throws net.dv8tion.jda.api.exceptions.DetachedEntityException
-     *         if the bot isn't in the guild.
+     *         if the bot {@link Guild#isDetached() isn't in the guild}.
      *
      * @return {@link net.dv8tion.jda.api.requests.RestAction}
      */
@@ -2001,7 +2001,7 @@ public interface MessageChannel extends Channel, Formattable
      *             <li>{@link net.dv8tion.jda.api.Permission#MESSAGE_HISTORY Permission.MESSAGE_HISTORY}</li>
      *         </ul>
      * @throws net.dv8tion.jda.api.exceptions.DetachedEntityException
-     *         if the bot isn't in the guild.
+     *         if the bot {@link Guild#isDetached() isn't in the guild}.
      *
      * @return {@link net.dv8tion.jda.api.requests.RestAction}
      */
@@ -2052,7 +2052,7 @@ public interface MessageChannel extends Channel, Formattable
      *             <li>If provided {@code emoji} is {@code null}.</li>
      *         </ul>
      * @throws net.dv8tion.jda.api.exceptions.DetachedEntityException
-     *         if the bot isn't in the guild.
+     *         if the bot {@link Guild#isDetached() isn't in the guild}.
      *
      * @return {@link net.dv8tion.jda.api.requests.RestAction}
      */
@@ -2107,7 +2107,7 @@ public interface MessageChannel extends Channel, Formattable
      *             <li>If provided {@code emoji} is {@code null}.</li>
      *         </ul>
      * @throws net.dv8tion.jda.api.exceptions.DetachedEntityException
-     *         if the bot isn't in the guild.
+     *         if the bot {@link Guild#isDetached() isn't in the guild}.
      *
      * @return {@link net.dv8tion.jda.api.requests.RestAction}
      */
@@ -2155,7 +2155,7 @@ public interface MessageChannel extends Channel, Formattable
      *             <li>If provided {@code emoji} is {@code null}.</li>
      *         </ul>
      * @throws net.dv8tion.jda.api.exceptions.DetachedEntityException
-     *         if the bot isn't in the guild.
+     *         if the bot {@link Guild#isDetached() isn't in the guild}.
      *
      * @return The {@link ReactionPaginationAction} of the emoji's users.
      */
@@ -2208,7 +2208,7 @@ public interface MessageChannel extends Channel, Formattable
      *             <li>If provided {@code emoji} is {@code null}.</li>
      *         </ul>
      * @throws net.dv8tion.jda.api.exceptions.DetachedEntityException
-     *         if the bot isn't in the guild.
+     *         if the bot {@link Guild#isDetached() isn't in the guild}.
      *
      * @return The {@link ReactionPaginationAction ReactionPaginationAction} of the emoji's users.
      *
@@ -2256,7 +2256,7 @@ public interface MessageChannel extends Channel, Formattable
      *             <li>{@link net.dv8tion.jda.api.Permission#MESSAGE_MANAGE Permission.MESSAGE_MANAGE}</li>
      *         </ul>
      * @throws net.dv8tion.jda.api.exceptions.DetachedEntityException
-     *         if the bot isn't in the guild.
+     *         if the bot {@link Guild#isDetached() isn't in the guild}.
      *
      * @return {@link net.dv8tion.jda.api.requests.RestAction RestAction}
      */
@@ -2305,7 +2305,7 @@ public interface MessageChannel extends Channel, Formattable
      *             <li>{@link net.dv8tion.jda.api.Permission#MESSAGE_MANAGE Permission.MESSAGE_MANAGE}</li>
      *         </ul>
      * @throws net.dv8tion.jda.api.exceptions.DetachedEntityException
-     *         if the bot isn't in the guild.
+     *         if the bot {@link Guild#isDetached() isn't in the guild}.
      *
      * @return {@link net.dv8tion.jda.api.requests.RestAction RestAction}
      */
@@ -2351,7 +2351,7 @@ public interface MessageChannel extends Channel, Formattable
      *             <li>{@link net.dv8tion.jda.api.Permission#MESSAGE_MANAGE Permission.MESSAGE_MANAGE}</li>
      *         </ul>
      * @throws net.dv8tion.jda.api.exceptions.DetachedEntityException
-     *         if the bot isn't in the guild.
+     *         if the bot {@link Guild#isDetached() isn't in the guild}.
      *
      * @return {@link net.dv8tion.jda.api.requests.RestAction RestAction}
      */
@@ -2400,7 +2400,7 @@ public interface MessageChannel extends Channel, Formattable
      *             <li>{@link net.dv8tion.jda.api.Permission#MESSAGE_MANAGE Permission.MESSAGE_MANAGE}</li>
      *         </ul>
      * @throws net.dv8tion.jda.api.exceptions.DetachedEntityException
-     *         if the bot isn't in the guild.
+     *         if the bot {@link Guild#isDetached() isn't in the guild}.
      *
      * @return {@link net.dv8tion.jda.api.requests.RestAction RestAction}
      */
@@ -2430,7 +2430,7 @@ public interface MessageChannel extends Channel, Formattable
      *         If this is a {@link GuildMessageChannel GuildMessageChannel} and this account does not have
      *         {@link net.dv8tion.jda.api.Permission#VIEW_CHANNEL Permission.VIEW_CHANNEL}
      * @throws net.dv8tion.jda.api.exceptions.DetachedEntityException
-     *         if the bot isn't in the guild.
+     *         if the bot {@link Guild#isDetached() isn't in the guild}.
      *
      * @return {@link net.dv8tion.jda.api.requests.RestAction RestAction} - Type: List{@literal <}{@link net.dv8tion.jda.api.entities.Message}{@literal >}
      *         <br>Retrieves an immutable list of pinned messages
@@ -2500,7 +2500,7 @@ public interface MessageChannel extends Channel, Formattable
      *         If this is a {@link GuildMessageChannel GuildMessageChannel} and this account does not have
      *         {@link net.dv8tion.jda.api.Permission#VIEW_CHANNEL Permission.VIEW_CHANNEL}
      * @throws net.dv8tion.jda.api.exceptions.DetachedEntityException
-     *         if the bot isn't in the guild.
+     *         if the bot {@link Guild#isDetached() isn't in the guild}.
      *
      * @return {@link MessageEditAction}
      */
@@ -2550,7 +2550,7 @@ public interface MessageChannel extends Channel, Formattable
      *         If this is a {@link GuildMessageChannel} and this account does not have
      *         {@link net.dv8tion.jda.api.Permission#VIEW_CHANNEL Permission.VIEW_CHANNEL}
      * @throws net.dv8tion.jda.api.exceptions.DetachedEntityException
-     *         if the bot isn't in the guild.
+     *         if the bot {@link Guild#isDetached() isn't in the guild}.
      *
      * @return {@link MessageEditAction}
      */
@@ -2600,7 +2600,7 @@ public interface MessageChannel extends Channel, Formattable
      *         If this is a {@link GuildMessageChannel GuildMessageChannel} and this account does not have
      *         {@link net.dv8tion.jda.api.Permission#VIEW_CHANNEL Permission.VIEW_CHANNEL}
      * @throws net.dv8tion.jda.api.exceptions.DetachedEntityException
-     *         if the bot isn't in the guild.
+     *         if the bot {@link Guild#isDetached() isn't in the guild}.
      *
      * @return {@link MessageEditAction}
      */
@@ -2651,7 +2651,7 @@ public interface MessageChannel extends Channel, Formattable
      *         If this is a {@link GuildMessageChannel GuildMessageChannel} and this account does not have
      *         {@link net.dv8tion.jda.api.Permission#VIEW_CHANNEL Permission.VIEW_CHANNEL}
      * @throws net.dv8tion.jda.api.exceptions.DetachedEntityException
-     *         if the bot isn't in the guild.
+     *         if the bot {@link Guild#isDetached() isn't in the guild}.
      *
      * @return {@link MessageEditAction}
      */
@@ -2709,7 +2709,7 @@ public interface MessageChannel extends Channel, Formattable
      *         see the <a href="../util/Formatter.html#detail">Details</a>
      *         section of the formatter class specification.
      * @throws net.dv8tion.jda.api.exceptions.DetachedEntityException
-     *         if the bot isn't in the guild.
+     *         if the bot {@link Guild#isDetached() isn't in the guild}.
      *
      * @return {@link MessageEditAction}
      */
@@ -2765,7 +2765,7 @@ public interface MessageChannel extends Channel, Formattable
      *         see the <a href="../util/Formatter.html#detail">Details</a>
      *         section of the formatter class specification.
      * @throws net.dv8tion.jda.api.exceptions.DetachedEntityException
-     *         if the bot isn't in the guild.
+     *         if the bot {@link Guild#isDetached() isn't in the guild}.
      *
      * @return {@link MessageEditAction}
      */
@@ -2815,7 +2815,7 @@ public interface MessageChannel extends Channel, Formattable
      *         {@link net.dv8tion.jda.api.Permission#VIEW_CHANNEL Permission.VIEW_CHANNEL}
      *         or {@link net.dv8tion.jda.api.Permission#MESSAGE_SEND Permission.MESSAGE_SEND}
      * @throws net.dv8tion.jda.api.exceptions.DetachedEntityException
-     *         if the bot isn't in the guild.
+     *         if the bot {@link Guild#isDetached() isn't in the guild}.
      *
      * @return {@link MessageEditAction}
      */
@@ -2865,7 +2865,7 @@ public interface MessageChannel extends Channel, Formattable
      *         {@link net.dv8tion.jda.api.Permission#VIEW_CHANNEL Permission.VIEW_CHANNEL}
      *         or {@link net.dv8tion.jda.api.Permission#MESSAGE_SEND Permission.MESSAGE_SEND}
      * @throws net.dv8tion.jda.api.exceptions.DetachedEntityException
-     *         if the bot isn't in the guild.
+     *         if the bot {@link Guild#isDetached() isn't in the guild}.
      *
      * @return {@link MessageEditAction}
      */
@@ -2914,7 +2914,7 @@ public interface MessageChannel extends Channel, Formattable
      *         {@link net.dv8tion.jda.api.Permission#VIEW_CHANNEL Permission.VIEW_CHANNEL}
      *         or {@link net.dv8tion.jda.api.Permission#MESSAGE_SEND Permission.MESSAGE_SEND}
      * @throws net.dv8tion.jda.api.exceptions.DetachedEntityException
-     *         if the bot isn't in the guild.
+     *         if the bot {@link Guild#isDetached() isn't in the guild}.
      *
      * @return {@link MessageEditAction}
      */
@@ -2964,7 +2964,7 @@ public interface MessageChannel extends Channel, Formattable
      *         {@link net.dv8tion.jda.api.Permission#VIEW_CHANNEL Permission.VIEW_CHANNEL}
      *         or {@link net.dv8tion.jda.api.Permission#MESSAGE_SEND Permission.MESSAGE_SEND}
      * @throws net.dv8tion.jda.api.exceptions.DetachedEntityException
-     *         if the bot isn't in the guild.
+     *         if the bot {@link Guild#isDetached() isn't in the guild}.
      *
      * @return {@link MessageEditAction}
      */
@@ -3026,7 +3026,7 @@ public interface MessageChannel extends Channel, Formattable
      *         {@link net.dv8tion.jda.api.Permission#VIEW_CHANNEL Permission.VIEW_CHANNEL}
      *         or {@link net.dv8tion.jda.api.Permission#MESSAGE_SEND Permission.MESSAGE_SEND}
      * @throws net.dv8tion.jda.api.exceptions.DetachedEntityException
-     *         if the bot isn't in the guild.
+     *         if the bot {@link Guild#isDetached() isn't in the guild}.
      *
      * @return {@link MessageEditAction}
      */
@@ -3090,7 +3090,7 @@ public interface MessageChannel extends Channel, Formattable
      *         {@link net.dv8tion.jda.api.Permission#VIEW_CHANNEL Permission.VIEW_CHANNEL}
      *         or {@link net.dv8tion.jda.api.Permission#MESSAGE_SEND Permission.MESSAGE_SEND}
      * @throws net.dv8tion.jda.api.exceptions.DetachedEntityException
-     *         if the bot isn't in the guild.
+     *         if the bot {@link Guild#isDetached() isn't in the guild}.
      *
      * @return {@link MessageEditAction}
      */
@@ -3151,7 +3151,7 @@ public interface MessageChannel extends Channel, Formattable
      *         {@link net.dv8tion.jda.api.Permission#VIEW_CHANNEL Permission.VIEW_CHANNEL}
      *         or {@link net.dv8tion.jda.api.Permission#MESSAGE_SEND Permission.MESSAGE_SEND}
      * @throws net.dv8tion.jda.api.exceptions.DetachedEntityException
-     *         if the bot isn't in the guild.
+     *         if the bot {@link Guild#isDetached() isn't in the guild}.
      *
      * @return {@link MessageEditAction}
      */
@@ -3210,7 +3210,7 @@ public interface MessageChannel extends Channel, Formattable
      *         {@link net.dv8tion.jda.api.Permission#VIEW_CHANNEL Permission.VIEW_CHANNEL}
      *         or {@link net.dv8tion.jda.api.Permission#MESSAGE_SEND Permission.MESSAGE_SEND}
      * @throws net.dv8tion.jda.api.exceptions.DetachedEntityException
-     *         if the bot isn't in the guild.
+     *         if the bot {@link Guild#isDetached() isn't in the guild}.
      *
      * @return {@link MessageEditAction}
      */
@@ -3261,7 +3261,7 @@ public interface MessageChannel extends Channel, Formattable
      * @throws IllegalArgumentException
      *         If null is provided
      * @throws net.dv8tion.jda.api.exceptions.DetachedEntityException
-     *         if the bot isn't in the guild.
+     *         if the bot {@link Guild#isDetached() isn't in the guild}.
      *
      * @return {@link MessageEditAction} that can be used to further update the message
      *
@@ -3314,7 +3314,7 @@ public interface MessageChannel extends Channel, Formattable
      * @throws IllegalArgumentException
      *         If null is provided
      * @throws net.dv8tion.jda.api.exceptions.DetachedEntityException
-     *         if the bot isn't in the guild.
+     *         if the bot {@link Guild#isDetached() isn't in the guild}.
      *
      * @return {@link MessageEditAction} that can be used to further update the message
      *
@@ -3367,7 +3367,7 @@ public interface MessageChannel extends Channel, Formattable
      * @throws IllegalArgumentException
      *         If null is provided
      * @throws net.dv8tion.jda.api.exceptions.DetachedEntityException
-     *         if the bot isn't in the guild.
+     *         if the bot {@link Guild#isDetached() isn't in the guild}.
      *
      * @return {@link MessageEditAction} that can be used to further update the message
      *
@@ -3419,7 +3419,7 @@ public interface MessageChannel extends Channel, Formattable
      * @throws IllegalArgumentException
      *         If null is provided
      * @throws net.dv8tion.jda.api.exceptions.DetachedEntityException
-     *         if the bot isn't in the guild.
+     *         if the bot {@link Guild#isDetached() isn't in the guild}.
      *
      * @return {@link MessageEditAction} that can be used to further update the message
      *
