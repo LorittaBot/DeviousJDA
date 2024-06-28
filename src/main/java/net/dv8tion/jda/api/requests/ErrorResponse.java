@@ -142,6 +142,7 @@ public enum ErrorResponse
     FORUM_POST_TAG_REQUIRED(                  40067, "A tag is required to create a forum post in this channel"),
     DUPLICATE_RESOURCE_ENTITLEMENT(           40074, "An entitlement has already been granted for this resource"),
     CLOUDFLARE_BLOCKED_REQUEST(               40333, "Cloudflare is blocking your request. This can often be resolved by setting a proper User Agent"),
+    MAX_FOLLOW_UP_MESSAGES_HIT(               40094, "This interaction has hit the maximum number of follow up messages"),
     MISSING_ACCESS(                           50001, "Missing Access"),
     INVALID_ACCOUNT_TYPE(                     50002, "Invalid Account Type"),
     INVALID_DM_ACTION(                        50003, "Cannot execute action on a DM channel"),
