@@ -49,6 +49,8 @@ plugins {
     alias(libs.plugins.ideax)
     alias(libs.plugins.nmcp)
     alias(libs.plugins.nmcp.aggregation)
+    kotlin("jvm") version "2.3.0"
+    kotlin("plugin.serialization") version "2.3.0"
 }
 
 
@@ -222,7 +224,10 @@ dependencies {
     implementation(libs.tink)
 
     examplesImplementation(libs.jdave)
-
+    examplesImplementation("ch.qos.logback:logback-classic:1.4.4")
+    examplesImplementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.7.1")
+    examplesImplementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.8.1")
+    
     testImplementation(libs.bundles.junit)
     testImplementation(libs.reflections)
     testImplementation(libs.mockito)
@@ -502,6 +507,10 @@ tasks.named<JavaCompile>("compileExamplesJava") {
     options.errorprone {
         disableAllChecks.set(true)
     }
+}
+
+tasks.named("compileKotlin") {
+    dependsOn("generateApiModels")
 }
 
 tasks.build.configure {
