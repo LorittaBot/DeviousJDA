@@ -28,6 +28,7 @@ import net.dv8tion.jda.api.audio.hooks.ConnectionStatus;
 import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.entities.channel.middleman.AudioChannel;
 import net.dv8tion.jda.api.events.ExceptionEvent;
+import net.dv8tion.jda.api.events.PreProcessedRawGatewayEvent;
 import net.dv8tion.jda.api.events.RawGatewayEvent;
 import net.dv8tion.jda.api.events.session.*;
 import net.dv8tion.jda.api.exceptions.ParsingException;
@@ -55,7 +56,8 @@ import net.dv8tion.jda.internal.utils.compress.Decompressor;
 import net.dv8tion.jda.internal.utils.compress.ZlibDecompressor;
 import org.slf4j.Logger;
 import org.slf4j.MDC;
-
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.lang.ref.SoftReference;
@@ -177,7 +179,26 @@ public class WebSocketClient extends WebSocketAdapter implements WebSocketListen
         return chunkManager;
     }
 
-    public void ready() {
+    public void setSessionId(String sessionId) {
+        this.sessionId = sessionId;
+    }
+
+    @Nullable
+    public String getSessionId() {
+        return sessionId;
+    }
+
+    public void setResumeUrl(String resumeUrl) {
+        this.resumeUrl = resumeUrl;
+    }
+
+    @Nullable
+    public String getResumeUrl() {
+        return resumeUrl;
+    }
+
+    public void ready()
+    {
         if (initiating) {
             initiating = false;
             processingReady = false;
@@ -315,6 +336,10 @@ public class WebSocketClient extends WebSocketAdapter implements WebSocketListen
     }
 
     public void shutdown() {
+        shutdown(1000);
+    }
+
+    public synchronized void shutdown(int closeCode) {
         boolean callOnShutdown = MiscUtil.locked(reconnectLock, () -> {
             if (shutdown) {
                 return false;
@@ -325,13 +350,13 @@ public class WebSocketClient extends WebSocketAdapter implements WebSocketListen
                 api.getSessionController().removeSession(connectNode);
             }
             boolean wasConnected = connected;
-            close(1000, "Shutting down");
+            close(closeCode, "Shutting down");
             reconnectCondvar.signalAll(); // signal reconnect attempts to stop
             return !wasConnected;
         });
 
         if (callOnShutdown) {
-            onShutdown(1000);
+            onShutdown(closeCode);
         }
     }
 
@@ -804,7 +829,7 @@ public class WebSocketClient extends WebSocketAdapter implements WebSocketListen
         return output;
     }
 
-    protected void handleEvent(DataObject content) {
+    public void handleEvent(DataObject content) {
         try {
             onEvent(content);
         } catch (Exception ex) {
@@ -815,6 +840,14 @@ public class WebSocketClient extends WebSocketAdapter implements WebSocketListen
 
     protected void onEvent(DataObject content) {
         WS_THREAD.set(true);
+        if (api.isRawEvents())
+        {
+            PreProcessedRawGatewayEvent event = new PreProcessedRawGatewayEvent(api, api.getResponseTotal(), content);
+            api.handleEvent(event);
+            if (event.isCancelled())
+                return;
+        }
+
         int opCode = content.getInt("op");
 
         if (!content.isNull("s")) {
@@ -902,6 +935,8 @@ public class WebSocketClient extends WebSocketAdapter implements WebSocketListen
                     api.setStatus(JDA.Status.LOADING_SUBSYSTEMS);
                     processingReady = true;
                     handleIdentifyRateLimit = false;
+                    // Required to avoid the WebSocketSendingThread stalling forever when sending a fake READY request
+                    sentAuthInfo = true;
                     // first handle the ready payload before applying the session id
                     // this prevents a possible race condition with the cache of the guild setup
                     // controller
