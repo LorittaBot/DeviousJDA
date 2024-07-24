@@ -881,14 +881,28 @@ public class JDAImpl implements JDA {
     }
 
     @Override
-    public synchronized void shutdownNow() {
+    public synchronized void shutdownNow()
+    {
+        shutdownNow(1000);
+    }
+
+    @Override
+    public synchronized void shutdownNow(int closeCode)
+    {
         requester.stop(true, this::shutdownRequester); // stop all requests
-        shutdown();
+        shutdown(closeCode);
         threadConfig.shutdownNow();
     }
 
     @Override
-    public synchronized void shutdown() {
+    public synchronized void shutdown()
+    {
+        shutdown(1000);
+    }
+
+    @Override
+    public synchronized void shutdown(int closeCode)
+    {
         Status status = getStatus();
         if (status == Status.SHUTDOWN || status == Status.SHUTTING_DOWN) {
             return;
@@ -899,7 +913,7 @@ public class JDAImpl implements JDA {
         WebSocketClient client = getClient();
         if (client != null) {
             client.getChunkManager().shutdown();
-            client.shutdown();
+            client.shutdown(closeCode);
         } else {
             shutdownInternals(new ShutdownEvent(this, OffsetDateTime.now(), 1000));
         }

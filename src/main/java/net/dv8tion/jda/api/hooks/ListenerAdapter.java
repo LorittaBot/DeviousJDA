@@ -133,6 +133,8 @@ public abstract class ListenerAdapter implements EventListener {
 
     public void onRawGateway(@Nonnull RawGatewayEvent event) {}
 
+    public void onPreProcessedRawGateway(@Nonnull PreProcessedRawGatewayEvent event) {}
+
     public void onGatewayPing(@Nonnull GatewayPingEvent event) {}
 
     // Session Events
