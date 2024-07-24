@@ -832,7 +832,7 @@ public class DetachedGuildImpl implements Guild, IDetachableEntityMixin
 
     @Nonnull
     @Override
-    public AuditableRestAction<BulkBanResponse> ban(@Nonnull Collection<UserSnowflake> users, @Nullable Duration deletionTime)
+    public AuditableRestAction<BulkBanResponse> ban(@Nonnull Collection<? extends UserSnowflake> users, @Nullable Duration deletionTime)
     {
         throw detachedException();
     }
