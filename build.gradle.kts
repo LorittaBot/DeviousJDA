@@ -29,6 +29,8 @@ plugins {
 
     id("io.github.gradle-nexus.publish-plugin") version "2.0.0"
     id("com.github.johnrengelman.shadow") version "8.1.1"
+    kotlin("jvm") version "2.0.0"
+    kotlin("plugin.serialization") version "2.0.0"
 }
 
 
@@ -148,6 +150,10 @@ dependencies {
         addAll(configurations["api"].allDependencies)
         addAll(configurations["implementation"].allDependencies)
         addAll(configurations["compileOnly"].allDependencies)
+
+        add("examplesImplementation", "ch.qos.logback:logback-classic:1.4.4")
+        add("examplesImplementation", "org.jetbrains.kotlinx:kotlinx-serialization-json:1.7.1")
+        add("examplesImplementation", "org.jetbrains.kotlinx:kotlinx-coroutines-core:1.8.1")
     }
 
     testImplementation(libs.junit)
