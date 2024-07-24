@@ -164,6 +164,16 @@ public interface Sticker extends StickerSnowflake
         }
 
         /**
+         * The raw key used to identify types within the api.
+         *
+         * @return Raw id for this StickerFormat
+         */
+        public int getId()
+        {
+            return id;
+        }
+
+        /**
          * The file extension used for the sticker asset.
          *
          * @throws java.lang.IllegalStateException

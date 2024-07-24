@@ -1953,6 +1953,20 @@ public interface JDA extends IGuildChannelContainer<Channel>
     void shutdown();
 
     /**
+     * Shuts down this JDA instance, closing all its connections.
+     * After this command is issued the JDA Instance can not be used anymore.
+     * Already enqueued {@link net.dv8tion.jda.api.requests.RestAction RestActions} are still going to be executed.
+     *
+     * <p>If you want this instance to shutdown without executing, use {@link #shutdownNow() shutdownNow()}
+     *
+     * <p>This will interrupt the default JDA event thread, due to the gateway connection being interrupted.
+     *
+     * @param  closeCode the WebSocket close code that will be used when closing the connection, depending on the close code used, the gateway session may still be available for resume
+     * @see #shutdownNow()
+     */
+    void shutdown(int closeCode);
+
+    /**
      * Shuts down this JDA instance instantly, closing all its connections.
      * After this command is issued the JDA Instance can not be used anymore.
      * This will also cancel all queued {@link net.dv8tion.jda.api.requests.RestAction RestActions}.
@@ -1964,6 +1978,20 @@ public interface JDA extends IGuildChannelContainer<Channel>
      * @see #shutdown()
      */
     void shutdownNow();
+
+    /**
+     * Shuts down this JDA instance instantly, closing all its connections.
+     * After this command is issued the JDA Instance can not be used anymore.
+     * This will also cancel all queued {@link net.dv8tion.jda.api.requests.RestAction RestActions}.
+     *
+     * <p>If you want this instance to shutdown without cancelling enqueued RestActions use {@link #shutdown() shutdown()}
+     *
+     * <p>This will interrupt the default JDA event thread, due to the gateway connection being interrupted.
+     *
+     * @param  closeCode the WebSocket close code that will be used when closing the connection, depending on the close code used, such as code 1012, the gateway session may still be available for resume
+     * @see #shutdown()
+     */
+    void shutdownNow(int closeCode);
 
     ///**
     // * Installs an auxiliary cable into the given port of your system.
