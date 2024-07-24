@@ -49,6 +49,8 @@ plugins {
     alias(libs.plugins.spotless)
     alias(libs.plugins.openrewrite)
     alias(libs.plugins.ideax)
+    kotlin("jvm") version "2.3.0"
+    kotlin("plugin.serialization") version "2.3.0"
 }
 
 
@@ -220,6 +222,10 @@ dependencies {
         addAll(configurations["api"].allDependencies)
         addAll(configurations["implementation"].allDependencies)
         addAll(configurations["compileOnly"].allDependencies)
+
+        add("examplesImplementation", "ch.qos.logback:logback-classic:1.4.4")
+        add("examplesImplementation", "org.jetbrains.kotlinx:kotlinx-serialization-json:1.7.1")
+        add("examplesImplementation", "org.jetbrains.kotlinx:kotlinx-coroutines-core:1.8.1")
     }
 
     examplesImplementation(libs.jdave)
@@ -504,6 +510,10 @@ val compileJava by tasks.getting(JavaCompile::class) {
 
 tasks.named<JavaCompile>("compileTestJava8Java") {
     options.release = 8
+}
+
+tasks.named("compileKotlin") {
+    dependsOn("generateApiModels")
 }
 
 tasks.build.configure {
