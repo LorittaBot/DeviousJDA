@@ -621,6 +621,12 @@ public class JDAImpl implements JDA
     @Override
     public CacheRestAction<User> retrieveUserById(long id)
     {
+        try {
+            throw new RuntimeException();
+        } catch (RuntimeException e) {
+            LOG.info("JDAImpl#retrieveUserById() - UserId: {}", id, e);
+        }
+
         return new DeferredRestAction<>(this, User.class,
                 () -> isIntent(GatewayIntent.GUILD_MEMBERS) || isIntent(GatewayIntent.GUILD_PRESENCES) ? getUserById(id) : null,
                 () -> {

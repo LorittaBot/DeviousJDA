@@ -26,9 +26,12 @@ import net.dv8tion.jda.api.utils.data.DataObject;
 import net.dv8tion.jda.internal.JDAImpl;
 import net.dv8tion.jda.internal.entities.channel.concrete.PrivateChannelImpl;
 import net.dv8tion.jda.internal.requests.DeferredRestAction;
+import net.dv8tion.jda.internal.requests.Requester;
 import net.dv8tion.jda.internal.requests.RestActionImpl;
 import net.dv8tion.jda.internal.utils.EntityString;
 import net.dv8tion.jda.internal.utils.Helpers;
+import net.dv8tion.jda.internal.utils.JDALogger;
+import org.slf4j.Logger;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -39,6 +42,8 @@ import java.util.List;
 
 public class UserImpl extends UserSnowflakeImpl implements User
 {
+    public static final Logger LOG = JDALogger.getLog(UserImpl.class);
+
     protected final JDAImpl api;
 
     protected short discriminator;
@@ -89,6 +94,12 @@ public class UserImpl extends UserSnowflakeImpl implements User
     @Override
     public CacheRestAction<Profile> retrieveProfile()
     {
+        try {
+            throw new RuntimeException();
+        } catch (RuntimeException e) {
+            LOG.info("UserImpl#retrieveProfile() - UserId: {}", id, e);
+        }
+
         return new DeferredRestAction<>(getJDA(), Profile.class, this::getProfile, () -> {
             Route.CompiledRoute route = Route.Users.GET_USER.compile(getId());
             return new RestActionImpl<>(getJDA(), route, (response, request) -> {

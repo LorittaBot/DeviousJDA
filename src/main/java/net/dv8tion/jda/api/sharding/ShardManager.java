@@ -36,12 +36,15 @@ import net.dv8tion.jda.api.utils.cache.ChannelCacheView;
 import net.dv8tion.jda.api.utils.cache.ShardCacheView;
 import net.dv8tion.jda.api.utils.cache.SnowflakeCacheView;
 import net.dv8tion.jda.internal.JDAImpl;
+import net.dv8tion.jda.internal.entities.UserImpl;
 import net.dv8tion.jda.internal.requests.CompletedRestAction;
 import net.dv8tion.jda.internal.requests.RestActionImpl;
 import net.dv8tion.jda.internal.utils.Checks;
 import net.dv8tion.jda.internal.utils.Helpers;
+import net.dv8tion.jda.internal.utils.JDALogger;
 import net.dv8tion.jda.internal.utils.cache.UnifiedChannelCacheView;
 import org.jetbrains.annotations.Unmodifiable;
+import org.slf4j.Logger;
 
 import javax.annotation.CheckReturnValue;
 import javax.annotation.Nonnull;
@@ -63,6 +66,8 @@ import java.util.stream.Collectors;
  */
 public interface ShardManager extends IGuildChannelContainer<Channel>
 {
+    public static final Logger LOG = JDALogger.getLog(UserImpl.class);
+
     /**
      * Adds all provided listeners to the event-listeners that will be used to handle events.
      *
@@ -527,6 +532,11 @@ public interface ShardManager extends IGuildChannelContainer<Channel>
             throw new IllegalStateException("no shards active");
 
         JDAImpl jda = (JDAImpl) api;
+        try {
+            throw new RuntimeException();
+        } catch (RuntimeException e) {
+            LOG.info("ShardManager#retrieveUserById - UserId: {}", id, e);
+        }
         Route.CompiledRoute route = Route.Users.GET_USER.compile(Long.toUnsignedString(id));
         return new RestActionImpl<>(jda, route, (response, request) -> jda.getEntityBuilder().createUser(response.getObject()));
     }
