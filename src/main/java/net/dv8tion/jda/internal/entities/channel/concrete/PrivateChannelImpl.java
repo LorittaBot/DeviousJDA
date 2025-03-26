@@ -20,8 +20,10 @@ import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.entities.User;
 import net.dv8tion.jda.api.entities.channel.ChannelType;
 import net.dv8tion.jda.api.entities.channel.concrete.PrivateChannel;
+import net.dv8tion.jda.api.requests.RestAction;
 import net.dv8tion.jda.internal.entities.channel.AbstractChannelImpl;
 import net.dv8tion.jda.internal.entities.channel.mixin.concrete.PrivateChannelMixin;
+import net.dv8tion.jda.internal.requests.CompletedRestAction;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -58,6 +60,13 @@ public class PrivateChannelImpl extends AbstractChannelImpl<PrivateChannelImpl> 
     {
         updateUser();
         return user;
+    }
+
+    @Nonnull
+    @Override
+    public RestAction<PrivateChannel> retrieveOpenPrivateChannel()
+    {
+        return new CompletedRestAction<>(getJDA(), this);
     }
 
     @Override

@@ -21,6 +21,7 @@ import net.dv8tion.jda.api.entities.User;
 import net.dv8tion.jda.api.entities.channel.ChannelType;
 import net.dv8tion.jda.api.entities.channel.concrete.PrivateChannel;
 import net.dv8tion.jda.api.exceptions.DetachedEntityException;
+import net.dv8tion.jda.api.requests.RestAction;
 import net.dv8tion.jda.internal.entities.channel.AbstractChannelImpl;
 import net.dv8tion.jda.internal.entities.channel.mixin.concrete.PrivateChannelMixin;
 
@@ -44,7 +45,8 @@ public class DetachedPrivateChannelImpl extends AbstractChannelImpl<DetachedPriv
     @Override
     public DetachedEntityException detachedException()
     {
-        return new DetachedEntityException("Cannot perform action in friend DMs");
+        return new DetachedEntityException("Cannot perform action in friend DMs, as they are not open DMs, " +
+                "you might want to retrieve one through #retrieveOpenPrivateChannel()");
     }
 
     @Override
@@ -65,6 +67,20 @@ public class DetachedPrivateChannelImpl extends AbstractChannelImpl<DetachedPriv
     public User getUser()
     {
         return user;
+    }
+
+    @Nonnull
+    @Override
+    public RestAction<PrivateChannel> retrieveOpenPrivateChannel()
+    {
+        if (user == null)
+        {
+            // This code path only runs if for whatever reason Discord doesn't send us the recipients in the interaction
+            // as [[InteractionEntityBuilder#createPrivateChannel]] doesn't throw when the recipient is absent
+            throw detachedException();
+        }
+
+        return user.openPrivateChannel();
     }
 
     @Override

@@ -26,7 +26,17 @@ import javax.annotation.Nullable;
 /**
  * Represents the connection used for direct messaging.
  *
+ * <p>This channel may communicate with different users in interactions triggered by user-installed apps:
+ * <ul>
+ *     <li>In bot DMs, this channel will send messages to {@link net.dv8tion.jda.api.JDA#getSelfUser() this bot}.</li>
+ *     <li>In friend DMs, this channel will send messages to that friend,
+ *         from the bot itself, this is different from where the interaction was executed.
+ *         <br>Note: As friend DMs are detached channels, you will need to {@linkplain #retrieveOpenPrivateChannel() retrieve an open channel first}.
+ *     </li>
+ * </ul>
+ *
  * @see User#openPrivateChannel()
+ * @see #retrieveOpenPrivateChannel()
  */
 public interface PrivateChannel extends MessageChannel
 {
@@ -40,7 +50,6 @@ public interface PrivateChannel extends MessageChannel
      *     <li>A message is deleted</li>
      *     <li>This account sends a message to a user from another shard (not shard 0)</li>
      *     <li>This account receives an interaction response, happens when using an user-installed interaction</li>
-     *     <li>This channel represents a DM channel between friends, happens when using an user-installed interaction</li>
      * </ul>
      * The consequence of this is that for any message this bot receives from a guild or from other users, the user will not be null.
      *
@@ -63,6 +72,27 @@ public interface PrivateChannel extends MessageChannel
     @Nonnull
     @CheckReturnValue
     RestAction<User> retrieveUser();
+
+    /**
+     * Retrieves a {@link PrivateChannel} that is guaranteed to be open.
+     * <br>For detached {@link PrivateChannel PrivateChannels},
+     * it essentially transforms this into an attached {@link PrivateChannel}.
+     *
+     * <p>This is only useful for interactions started in Friend DMs (with user-installed apps),
+     * as this will return a valid channel to communicate between your bot and the friend,
+     * not between the interaction's caller and the friend.
+     *
+     * <p><b>Note:</b> Open private channels does not imply you can successfully send messages to the recipient.
+     *
+     * @throws net.dv8tion.jda.api.exceptions.DetachedEntityException
+     *         If this channel is detached and {@link #getUser()} returns {@code null},
+     *         this only happens if Discord does not send us the recipient, which should not happen.
+     *
+     * @return A {@link RestAction} to retrieve an open {@link PrivateChannel}.
+     */
+    @Nonnull
+    @CheckReturnValue
+    RestAction<PrivateChannel> retrieveOpenPrivateChannel();
 
     /**
      * The human-readable name of this channel.
