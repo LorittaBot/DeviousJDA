@@ -30,6 +30,7 @@ import net.dv8tion.jda.api.entities.channel.middleman.AudioChannel;
 import net.dv8tion.jda.api.events.ExceptionEvent;
 import net.dv8tion.jda.api.events.PreProcessedRawGatewayEvent;
 import net.dv8tion.jda.api.events.RawGatewayEvent;
+import net.dv8tion.jda.api.events.WebSocketPreConnectGatewayEvent;
 import net.dv8tion.jda.api.events.session.*;
 import net.dv8tion.jda.api.exceptions.ParsingException;
 import net.dv8tion.jda.api.managers.AudioManager;
@@ -395,6 +396,9 @@ public class WebSocketClient extends WebSocketAdapter implements WebSocketListen
         if (shutdown)
             throw new RejectedExecutionException("JDA is shutdown!");
         initiating = true;
+
+        WebSocketPreConnectGatewayEvent event = new WebSocketPreConnectGatewayEvent(api, this);
+        api.handleEvent(event);
 
         try
         {
