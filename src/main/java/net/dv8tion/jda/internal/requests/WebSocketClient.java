@@ -30,6 +30,7 @@ import net.dv8tion.jda.api.entities.channel.middleman.AudioChannel;
 import net.dv8tion.jda.api.events.ExceptionEvent;
 import net.dv8tion.jda.api.events.PreProcessedRawGatewayEvent;
 import net.dv8tion.jda.api.events.RawGatewayEvent;
+import net.dv8tion.jda.api.events.WebSocketPreConnectGatewayEvent;
 import net.dv8tion.jda.api.events.session.*;
 import net.dv8tion.jda.api.exceptions.ParsingException;
 import net.dv8tion.jda.api.managers.AudioManager;
@@ -378,6 +379,9 @@ public class WebSocketClient extends WebSocketAdapter implements WebSocketListen
         initiating = true;
 
         try {
+            WebSocketPreConnectGatewayEvent event = new WebSocketPreConnectGatewayEvent(api, this);
+            api.handleEvent(event);
+
             String gatewayUrl = resumeUrl != null ? resumeUrl : api.getGatewayUrl();
             gatewayUrl = IOUtil.addQuery(
                     gatewayUrl, "encoding", encoding.name().toLowerCase(), "v", JDAInfo.DISCORD_GATEWAY_VERSION);
