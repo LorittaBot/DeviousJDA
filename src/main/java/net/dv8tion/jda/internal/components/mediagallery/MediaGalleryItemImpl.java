@@ -110,9 +110,8 @@ public class MediaGalleryItemImpl implements MediaGalleryItem
     @Override
     public DataObject toData()
     {
-        final String fileName = Helpers.getLastPathSegment(media.getUrl());
         return DataObject.empty()
-                .put("media", DataObject.empty().put("url", "attachment://" + fileName))
+                .put("media", DataObject.empty().put("url", this.url))
                 .put("description", description)
                 .put("spoiler", spoiler);
     }
