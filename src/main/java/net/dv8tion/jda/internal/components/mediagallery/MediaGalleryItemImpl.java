@@ -31,7 +31,7 @@ import javax.annotation.Nullable;
 import java.util.Objects;
 import java.util.stream.Stream;
 
-public class MediaGalleryItemImpl implements MediaGalleryItem, FileContainerMixin
+public class MediaGalleryItemImpl implements MediaGalleryItem
 {
     private final String url, description;
     private final ResolvedMedia media;
@@ -91,12 +91,6 @@ public class MediaGalleryItemImpl implements MediaGalleryItem, FileContainerMixi
     public ResolvedMedia getResolvedMedia()
     {
         return media;
-    }
-
-    @Override
-    public Stream<FileUpload> getFiles() {
-        final String fileName = Helpers.getLastPathSegment(media.getUrl());
-        return Stream.of(media.getProxy().downloadAsFileUpload(fileName));
     }
 
     @Nullable
