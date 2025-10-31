@@ -17,6 +17,7 @@
 package net.dv8tion.jda.internal.requests;
 
 import com.neovisionaries.ws.client.*;
+import dev.freya02.discord.zstd.api.ZstdDecompressor;
 import gnu.trove.iterator.TLongObjectIterator;
 import gnu.trove.map.TLongObjectMap;
 import net.dv8tion.jda.api.GatewayEncoding;
@@ -53,6 +54,8 @@ import net.dv8tion.jda.internal.utils.UnlockHook;
 import net.dv8tion.jda.internal.utils.cache.AbstractCacheView;
 import net.dv8tion.jda.internal.utils.compress.Decompressor;
 import net.dv8tion.jda.internal.utils.compress.ZlibDecompressor;
+import net.dv8tion.jda.internal.utils.compress.ZstdDecompressorAdapter;
+import net.dv8tion.jda.internal.utils.compress.ZstdDecompressorFactoryProvider;
 import org.slf4j.Logger;
 import org.slf4j.MDC;
 
@@ -386,6 +389,13 @@ public class WebSocketClient extends WebSocketAdapter implements WebSocketListen
                     case ZLIB:
                         if (decompressor == null || decompressor.getType() != Compression.ZLIB)
                             decompressor = new ZlibDecompressor(api.getMaxBufferSize());
+                        break;
+                    case ZSTD:
+                        if (decompressor == null || decompressor.getType() != Compression.ZSTD)
+                        {
+                            final ZstdDecompressor zstdDecompressor = ZstdDecompressorFactoryProvider.getInstance().get(api.getMaxBufferSize());
+                            decompressor = new ZstdDecompressorAdapter(zstdDecompressor);
+                        }
                         break;
                     default:
                         throw new IllegalStateException("Unknown compression");

@@ -100,6 +100,9 @@ dependencies {
     api(libs.websocket.client)
     api(libs.okhttp)
 
+    // Zstd decompression API
+    implementation(libs.discord.zstd.java.api)
+
     //Opus library support
     api(libs.opus)
 
