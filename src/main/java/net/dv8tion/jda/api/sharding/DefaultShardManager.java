@@ -533,7 +533,7 @@ public class DefaultShardManager implements ShardManager
         threadingConfig.setCallbackPool(callbackPool, shutdownCallbackPool);
         threadingConfig.setEventPool(eventPool, shutdownEventPool);
         threadingConfig.setAudioPool(audioPool, shutdownAudioPool);
-        MetaConfig metaConfig = new MetaConfig(this.metaConfig.getMaxBufferSize(), this.metaConfig.getContextMap(shardId), this.metaConfig.getCacheFlags(), this.sessionConfig.getFlags());
+        MetaConfig metaConfig = new MetaConfig(this.metaConfig.getContextMap(shardId), this.metaConfig.getCacheFlags(), this.sessionConfig.getFlags());
         RestConfig restConfig = this.restConfigProvider.apply(shardId);
         if (restConfig == null)
             restConfig = new RestConfig();
@@ -597,7 +597,7 @@ public class DefaultShardManager implements ShardManager
         jda.setSelfUser(selfUser);
         jda.setStatus(JDA.Status.INITIALIZED); //This is already set by JDA internally, but this is to make sure the listeners catch it.
 
-        jda.login(this.gatewayURL, shardInfo, this.metaConfig.getCompression(), false, shardingConfig.getIntents(), this.metaConfig.getEncoding());
+        jda.login(this.gatewayURL, shardInfo, this.metaConfig.getDecompressorFactory(), false, shardingConfig.getIntents(), this.metaConfig.getEncoding());
 
         return jda;
     }

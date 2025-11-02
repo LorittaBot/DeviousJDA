@@ -32,6 +32,7 @@ import net.dv8tion.jda.internal.JDAImpl;
 import net.dv8tion.jda.internal.managers.PresenceImpl;
 import net.dv8tion.jda.internal.utils.Checks;
 import net.dv8tion.jda.internal.utils.IOUtil;
+import net.dv8tion.jda.internal.utils.compress.DecompressorFactory;
 import net.dv8tion.jda.internal.utils.config.AuthorizationConfig;
 import net.dv8tion.jda.internal.utils.config.MetaConfig;
 import net.dv8tion.jda.internal.utils.config.SessionConfig;
@@ -1820,7 +1821,7 @@ public class JDABuilder
         threadingConfig.setEventPool(eventPool, shutdownEventPool);
         threadingConfig.setAudioPool(audioPool, shutdownAudioPool);
         SessionConfig sessionConfig = new SessionConfig(controller, httpClient, wsFactory, voiceDispatchInterceptor, flags, maxReconnectDelay, largeThreshold);
-        MetaConfig metaConfig = new MetaConfig(maxBufferSize, contextMap, cacheFlags, flags);
+        MetaConfig metaConfig = new MetaConfig(contextMap, cacheFlags, flags);
 
         JDAImpl jda = new JDAImpl(authConfig, sessionConfig, threadingConfig, metaConfig, restConfig);
         jda.setMemberCachePolicy(memberCachePolicy);
@@ -1844,7 +1845,8 @@ public class JDABuilder
                 .setCacheActivity(activity)
                 .setCacheIdle(idle)
                 .setCacheStatus(status);
-        jda.login(shardInfo, compression, true, intents, encoding);
+        DecompressorFactory decompressorFactory = DecompressorFactory.of(compression, maxBufferSize);
+        jda.login(shardInfo, decompressorFactory, true, intents, encoding);
         return jda;
     }
 
