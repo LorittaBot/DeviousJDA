@@ -101,7 +101,7 @@ dependencies {
     api(libs.okhttp)
 
     // Zstd decompression API
-    implementation(libs.discord.zstd.java.api)
+    api(libs.discord.zstd.java.api)
 
     //Opus library support
     api(libs.opus)
