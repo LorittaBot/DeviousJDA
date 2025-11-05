@@ -26,22 +26,23 @@ import java.util.ServiceLoader;
 
 public class ZstdDecompressorFactoryProvider
 {
-    private static ZstdDecompressorFactory factory;
+    private static dev.freya02.discord.zstd.api.ZstdDecompressorFactoryProvider provider;
 
     @Nonnull
-    public static synchronized ZstdDecompressorFactory getInstance() throws IOException
+    public static synchronized ZstdDecompressorFactory getInstance(int bufferSizeHint) throws IOException
     {
-        if (factory == null)
+        if (provider == null)
         {
-            Iterator<ZstdDecompressorFactory> factories = ServiceLoader.load(ZstdDecompressorFactory.class).iterator();
-            if (!factories.hasNext())
+            Iterator<dev.freya02.discord.zstd.api.ZstdDecompressorFactoryProvider> providers =
+                    ServiceLoader.load(dev.freya02.discord.zstd.api.ZstdDecompressorFactoryProvider.class).iterator();
+            if (!providers.hasNext())
                 throw new IllegalStateException("No Zstd decompressor was found, please install one, see https://github.com/freya022/discord-zstd-java");
 
             ZstdNativesLoader.loadFromJar();
 
-            factory = factories.next();
+            provider = providers.next();
         }
 
-        return factory;
+        return provider.get(bufferSizeHint);
     }
 }
