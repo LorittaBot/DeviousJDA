@@ -9,16 +9,16 @@ public interface DecompressorFactory
 {
     Decompressor create();
 
-    static DecompressorFactory of(Compression compression, int maxBufferSize)
+    static DecompressorFactory of(Compression compression, int bufferSizeHint)
     {
         switch (compression)
         {
         case ZLIB:
-            return new ZlibDecompressorFactory(maxBufferSize);
+            return new ZlibDecompressorFactory(bufferSizeHint);
         case ZSTD:
             try
             {
-                return new ZstdDecompressorFactory(maxBufferSize);
+                return new ZstdDecompressorFactory(bufferSizeHint);
             }
             catch (IOException e)
             {

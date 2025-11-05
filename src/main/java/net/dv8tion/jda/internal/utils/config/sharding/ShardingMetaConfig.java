@@ -37,14 +37,14 @@ public class ShardingMetaConfig extends MetaConfig
     private final IntFunction<? extends ConcurrentMap<String, String>> contextProvider;
 
     public ShardingMetaConfig(
-        int maxBufferSize,
+        int bufferSizeHint,
         @Nullable IntFunction<? extends ConcurrentMap<String, String>> contextProvider,
         @Nullable EnumSet<CacheFlag> cacheFlags, EnumSet<ConfigFlag> flags,
         Compression compression, GatewayEncoding encoding)
     {
         super(null, cacheFlags, flags);
 
-        this.decompressorFactory = DecompressorFactory.of(compression, maxBufferSize);
+        this.decompressorFactory = DecompressorFactory.of(compression, bufferSizeHint);
         this.contextProvider = contextProvider;
         this.encoding = encoding;
     }

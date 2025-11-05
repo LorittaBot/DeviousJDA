@@ -1,12 +1,15 @@
 package net.dv8tion.jda.internal.utils.compress;
 
+import net.dv8tion.jda.internal.utils.Checks;
+
 public class ZlibDecompressorFactory implements DecompressorFactory
 {
     private final int maxBufferSize;
 
-    public ZlibDecompressorFactory(int maxBufferSize)
+    public ZlibDecompressorFactory(int bufferSizeHint)
     {
-        this.maxBufferSize = maxBufferSize;
+        Checks.notNegative(bufferSizeHint, "Buffer size hint");
+        this.maxBufferSize = bufferSizeHint;
     }
 
     @Override
