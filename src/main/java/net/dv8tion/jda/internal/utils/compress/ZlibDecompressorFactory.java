@@ -8,8 +8,15 @@ public class ZlibDecompressorFactory implements DecompressorFactory
 
     public ZlibDecompressorFactory(int bufferSizeHint)
     {
-        Checks.notNegative(bufferSizeHint, "Buffer size hint");
-        this.maxBufferSize = bufferSizeHint;
+        if (bufferSizeHint == -1)
+        {
+            this.maxBufferSize = 2048;
+        }
+        else
+        {
+            Checks.notNegative(bufferSizeHint, "Buffer size hint");
+            this.maxBufferSize = bufferSizeHint;
+        }
     }
 
     @Override
