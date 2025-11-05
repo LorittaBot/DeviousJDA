@@ -1132,9 +1132,10 @@ public class WebSocketClient extends WebSocketAdapter implements WebSocketListen
     {
         if (decompressionLogOutput == null)
         {
-            String folderName = String.format("decompression-%s-shard-%d-logs", decompressor.getType().name().toLowerCase(), api.getShardInfo().getShardId());
+            String baseFolderName = "decompression-logs";
+            String folderName = String.format("shard-%d-%s", api.getShardInfo().getShardId(), decompressor.getType().name().toLowerCase());
             String fileName = String.format("log-%d.log", System.currentTimeMillis());
-            Path path = Paths.get(folderName, fileName);
+            Path path = Paths.get(baseFolderName, folderName, fileName);
             Files.createDirectories(path.getParent());
             decompressionLogOutput = new DataOutputStream(Files.newOutputStream(path, StandardOpenOption.CREATE, StandardOpenOption.APPEND));
         }
