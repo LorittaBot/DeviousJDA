@@ -1129,8 +1129,9 @@ public class WebSocketClient extends WebSocketAdapter implements WebSocketListen
         if (gwMessageDir == null)
         {
             String baseFolderName = "gateway-messages";
-            String folderName = String.format("message-%d-%s", api.getShardInfo().getShardId(), decompressor.getType().name().toLowerCase());
-            gwMessageDir = Files.createDirectories(Paths.get(baseFolderName, folderName));
+            String decompressionFolderName = decompressor.getType().name().toLowerCase();
+            String folderName = String.format("shard-%d", api.getShardInfo().getShardId());
+            gwMessageDir = Files.createDirectories(Paths.get(baseFolderName, decompressionFolderName, folderName));
         }
         int chunkIndex = i++;
         Path compressedChunkPath = gwMessageDir.resolve(String.format("Message-%s.bin", chunkIndex));
@@ -1147,7 +1148,7 @@ public class WebSocketClient extends WebSocketAdapter implements WebSocketListen
         {
             String baseFolderName = "decompression-logs";
             String folderName = String.format("shard-%d-%s", api.getShardInfo().getShardId(), decompressor.getType().name().toLowerCase());
-            String fileName = String.format("log-%d.log", System.currentTimeMillis());
+            String fileName = String.format("log-%d.bin", System.currentTimeMillis());
             Path path = Paths.get(baseFolderName, folderName, fileName);
             Files.createDirectories(path.getParent());
             decompressionLogOutput = new DataOutputStream(Files.newOutputStream(path, StandardOpenOption.CREATE, StandardOpenOption.APPEND));
