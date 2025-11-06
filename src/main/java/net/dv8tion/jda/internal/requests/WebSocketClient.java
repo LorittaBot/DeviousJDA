@@ -1045,8 +1045,6 @@ public class WebSocketClient extends WebSocketAdapter implements WebSocketListen
     private static boolean dumpData = Boolean.getBoolean("net.dv8tion.dump.ws.data");
     private static boolean measureDecompression = Boolean.getBoolean("net.dv8tion.measure.decompression");
 
-    private int i = 0;
-
     // Because zlib can be in multiple steps? haven't seen it in practise though
     private long timeToDecompress = 0;
     protected DataObject handleBinary(byte[] binary) throws DataFormatException
@@ -1088,10 +1086,7 @@ public class WebSocketClient extends WebSocketAdapter implements WebSocketListen
             {
                 try
                 {
-                    Path chunksDir = Files.createDirectories(Paths.get("chunks-" + decompressor.getType().name().toLowerCase()));
-                    int chunkIndex = i++;
-                    Files.write(chunksDir.resolve(String.format("Chunk-%s-%s.bin", api.getShardInfo().getShardId(), chunkIndex)), binary, StandardOpenOption.CREATE, StandardOpenOption.TRUNCATE_EXISTING);
-                    Files.write(chunksDir.resolve(String.format("Chunk-%s-%s.decompressed.bin", api.getShardInfo().getShardId(), chunkIndex)), data, StandardOpenOption.CREATE, StandardOpenOption.TRUNCATE_EXISTING);
+                    dumpData(binary, data);
                 }
                 catch (Exception e)
                 {
@@ -1125,6 +1120,24 @@ public class WebSocketClient extends WebSocketAdapter implements WebSocketListen
             LOG.error("Failed to parse json: {}", jsonString);
             throw e;
         }
+    }
+
+    private Path gwMessageDir;
+    private int i = 0;
+    private void dumpData(byte[] compressed, byte[] decompressed) throws IOException
+    {
+        if (gwMessageDir == null)
+        {
+            String baseFolderName = "gateway-messages";
+            String folderName = String.format("message-%d-%s", api.getShardInfo().getShardId(), decompressor.getType().name().toLowerCase());
+            gwMessageDir = Files.createDirectories(Paths.get(baseFolderName, folderName));
+        }
+        int chunkIndex = i++;
+        Path compressedChunkPath = gwMessageDir.resolve(String.format("Message-%s.bin", chunkIndex));
+        Path decompressedChunkPath = gwMessageDir.resolve(String.format("Message-%s.decompressed.bin", chunkIndex));
+
+        Files.write(compressedChunkPath, compressed, StandardOpenOption.CREATE, StandardOpenOption.TRUNCATE_EXISTING);
+        Files.write(decompressedChunkPath, decompressed, StandardOpenOption.CREATE, StandardOpenOption.TRUNCATE_EXISTING);
     }
 
     private DataOutputStream decompressionLogOutput;
