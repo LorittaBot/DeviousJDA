@@ -19,6 +19,7 @@ package net.dv8tion.jda.internal.utils.config.sharding;
 import net.dv8tion.jda.api.GatewayEncoding;
 import net.dv8tion.jda.api.utils.Compression;
 import net.dv8tion.jda.api.utils.cache.CacheFlag;
+import net.dv8tion.jda.internal.utils.Checks;
 import net.dv8tion.jda.internal.utils.compress.DecompressorFactory;
 import net.dv8tion.jda.internal.utils.config.MetaConfig;
 import net.dv8tion.jda.internal.utils.config.flags.ConfigFlag;
@@ -28,23 +29,25 @@ import javax.annotation.Nullable;
 import java.util.EnumSet;
 import java.util.concurrent.ConcurrentMap;
 import java.util.function.IntFunction;
+import java.util.function.IntUnaryOperator;
 
 public class ShardingMetaConfig extends MetaConfig
 {
-    private static final ShardingMetaConfig defaultConfig = new ShardingMetaConfig(2048, null, null, ConfigFlag.getDefault(), Compression.ZLIB, GatewayEncoding.JSON);
-    private final DecompressorFactory decompressorFactory;
+    private static final ShardingMetaConfig defaultConfig = new ShardingMetaConfig(i -> 2048, null, null, ConfigFlag.getDefault(), i -> Compression.ZLIB, GatewayEncoding.JSON);
     private final GatewayEncoding encoding;
     private final IntFunction<? extends ConcurrentMap<String, String>> contextProvider;
+    private final IntUnaryOperator bufferSizeHintProvider;
+    private final IntFunction<Compression> compressionProvider;
 
     public ShardingMetaConfig(
-        int bufferSizeHint,
+        IntUnaryOperator bufferSizeHintProvider,
         @Nullable IntFunction<? extends ConcurrentMap<String, String>> contextProvider,
         @Nullable EnumSet<CacheFlag> cacheFlags, EnumSet<ConfigFlag> flags,
-        Compression compression, GatewayEncoding encoding)
+        IntFunction<Compression> compressionProvider, GatewayEncoding encoding)
     {
         super(null, cacheFlags, flags);
-
-        this.decompressorFactory = DecompressorFactory.of(compression, bufferSizeHint);
+        this.bufferSizeHintProvider = bufferSizeHintProvider;
+        this.compressionProvider = compressionProvider;
         this.contextProvider = contextProvider;
         this.encoding = encoding;
     }
@@ -55,9 +58,14 @@ public class ShardingMetaConfig extends MetaConfig
         return contextProvider == null ? null : contextProvider.apply(shardId);
     }
 
-    public DecompressorFactory getDecompressorFactory()
+    @Nonnull
+    public DecompressorFactory getDecompressorFactory(int shardId)
     {
-        return decompressorFactory;
+        final Compression compression = compressionProvider.apply(shardId);
+        Checks.notNull(compression, "Compression");
+        final int bufferSizeHint = bufferSizeHintProvider.applyAsInt(shardId);
+
+        return DecompressorFactory.of(compression, bufferSizeHint);
     }
 
     public GatewayEncoding getEncoding()
