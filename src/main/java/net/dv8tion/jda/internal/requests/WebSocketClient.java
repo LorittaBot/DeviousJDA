@@ -35,7 +35,6 @@ import net.dv8tion.jda.api.events.session.*;
 import net.dv8tion.jda.api.exceptions.ParsingException;
 import net.dv8tion.jda.api.managers.AudioManager;
 import net.dv8tion.jda.api.requests.CloseCode;
-import net.dv8tion.jda.api.utils.Compression;
 import net.dv8tion.jda.api.utils.MiscUtil;
 import net.dv8tion.jda.api.utils.SessionController;
 import net.dv8tion.jda.api.utils.data.DataArray;
@@ -54,19 +53,24 @@ import net.dv8tion.jda.internal.utils.ShutdownReason;
 import net.dv8tion.jda.internal.utils.UnlockHook;
 import net.dv8tion.jda.internal.utils.cache.AbstractCacheView;
 import net.dv8tion.jda.internal.utils.compress.Decompressor;
-import net.dv8tion.jda.internal.utils.compress.ZlibDecompressor;
+import net.dv8tion.jda.internal.utils.compress.DecompressorFactory;
 import org.slf4j.Logger;
 import org.slf4j.MDC;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.io.ByteArrayOutputStream;
+import java.io.DataOutputStream;
 import java.io.IOException;
 import java.lang.ref.SoftReference;
 import java.net.Socket;
 import java.net.SocketException;
 import java.net.SocketTimeoutException;
 import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.nio.file.StandardOpenOption;
 import java.time.OffsetDateTime;
 import java.util.*;
 import java.util.concurrent.*;
@@ -89,7 +93,6 @@ public class WebSocketClient extends WebSocketAdapter implements WebSocketListen
     protected final JDAImpl api;
     protected final JDA.ShardInfo shardInfo;
     protected final Map<String, SocketHandler> handlers = new HashMap<>();
-    protected final Compression compression;
     protected final int gatewayIntents;
     protected final MemberChunkManager chunkManager;
     protected final GatewayEncoding encoding;
@@ -98,7 +101,7 @@ public class WebSocketClient extends WebSocketAdapter implements WebSocketListen
     protected String traceMetadata = null;
     protected volatile String sessionId = null;
     protected final Object readLock = new Object();
-    protected Decompressor decompressor;
+    protected final Decompressor decompressor;
     protected String resumeUrl = null;
 
     protected final ReentrantLock queueLock = new ReentrantLock();
@@ -135,12 +138,12 @@ public class WebSocketClient extends WebSocketAdapter implements WebSocketListen
 
     protected volatile ConnectNode connectNode;
 
-    public WebSocketClient(JDAImpl api, Compression compression, int gatewayIntents, GatewayEncoding encoding)
+    public WebSocketClient(JDAImpl api, DecompressorFactory decompressorFactory, int gatewayIntents, GatewayEncoding encoding)
     {
         this.api = api;
         this.executor = api.getGatewayPool();
         this.shardInfo = api.getShardInfo();
-        this.compression = compression;
+        this.decompressor = decompressorFactory.create();
         this.gatewayIntents = gatewayIntents;
         this.chunkManager = new MemberChunkManager(this);
         this.encoding = encoding;
@@ -407,18 +410,9 @@ public class WebSocketClient extends WebSocketAdapter implements WebSocketListen
                 "encoding", encoding.name().toLowerCase(),
                 "v", JDAInfo.DISCORD_GATEWAY_VERSION
             );
-            if (compression != Compression.NONE)
+            if (decompressor != null)
             {
-                gatewayUrl = IOUtil.addQuery(gatewayUrl, "compress", compression.getKey());
-                switch (compression)
-                {
-                    case ZLIB:
-                        if (decompressor == null || decompressor.getType() != Compression.ZLIB)
-                            decompressor = new ZlibDecompressor(api.getMaxBufferSize());
-                        break;
-                    default:
-                        throw new IllegalStateException("Unknown compression");
-                }
+                gatewayUrl = IOUtil.addQuery(gatewayUrl, "compress", decompressor.getType().getKey());
             }
 
             WebSocketFactory socketFactory = new WebSocketFactory(api.getWebSocketFactory());
@@ -1087,21 +1081,58 @@ public class WebSocketClient extends WebSocketAdapter implements WebSocketListen
             handleEvent(message);
     }
 
+    private static boolean dumpData = Boolean.getBoolean("net.dv8tion.dump.ws.data");
+    private static boolean measureDecompression = Boolean.getBoolean("net.dv8tion.measure.decompression");
+
+    // Because zlib can be in multiple steps? haven't seen it in practise though
+    private long timeToDecompress = 0;
     protected DataObject handleBinary(byte[] binary) throws DataFormatException
     {
         if (decompressor == null)
         {
             if (encoding == GatewayEncoding.ETF)
                 return DataObject.fromETF(binary);
-            throw new IllegalStateException("Cannot decompress binary message due to unknown compression algorithm: " + compression);
+            throw new IllegalStateException("Cannot read binary message due to unknown payload encoding: " + encoding);
         }
         // Scoping allows us to print the json that possibly failed parsing
         byte[] data;
         try
         {
-            data = decompressor.decompress(binary);
+            if (measureDecompression) {
+                final long start = System.nanoTime();
+                data = decompressor.decompress(binary);
+                final long end = System.nanoTime();
+                timeToDecompress += (end - start);
+                if (data != null)
+                {
+                    try
+                    {
+                        logDecompression(timeToDecompress, binary, data);
+                    }
+                    catch (Exception e)
+                    {
+                        measureDecompression = false;
+                        LOG.error("Error logging decompression", e);
+                    }
+                    timeToDecompress = 0;
+                }
+            } else {
+                data = decompressor.decompress(binary);
+            }
             if (data == null)
                 return null;
+            if (dumpData)
+            {
+                try
+                {
+                    dumpData(binary, data);
+                }
+                catch (Exception e)
+                {
+                    dumpData = false;
+                    LOG.error("Error saving data chunk", e);
+                }
+            }
         }
         catch (DataFormatException e)
         {
@@ -1128,6 +1159,44 @@ public class WebSocketClient extends WebSocketAdapter implements WebSocketListen
             LOG.error("Failed to parse json: {}", jsonString);
             throw e;
         }
+    }
+
+    private Path gwMessageDir;
+    private int i = 0;
+    private void dumpData(byte[] compressed, byte[] decompressed) throws IOException
+    {
+        if (gwMessageDir == null)
+        {
+            String baseFolderName = "gateway-messages";
+            String decompressionFolderName = decompressor.getType().name().toLowerCase();
+            String folderName = String.format("shard-%d", api.getShardInfo().getShardId());
+            gwMessageDir = Files.createDirectories(Paths.get(baseFolderName, decompressionFolderName, folderName));
+        }
+        int chunkIndex = i++;
+        Path compressedChunkPath = gwMessageDir.resolve(String.format("Message-%s.bin", chunkIndex));
+        Path decompressedChunkPath = gwMessageDir.resolve(String.format("Message-%s.decompressed.bin", chunkIndex));
+
+        Files.write(compressedChunkPath, compressed, StandardOpenOption.CREATE, StandardOpenOption.TRUNCATE_EXISTING);
+        Files.write(decompressedChunkPath, decompressed, StandardOpenOption.CREATE, StandardOpenOption.TRUNCATE_EXISTING);
+    }
+
+    private DataOutputStream decompressionLogOutput;
+    private void logDecompression(long timeToDecompress, byte[] compressed, byte[] decompressed) throws IOException
+    {
+        if (decompressionLogOutput == null)
+        {
+            String baseFolderName = "decompression-logs";
+            String folderName = String.format("shard-%d-%s", api.getShardInfo().getShardId(), decompressor.getType().name().toLowerCase());
+            String fileName = String.format("log-%d.bin", System.currentTimeMillis());
+            Path path = Paths.get(baseFolderName, folderName, fileName);
+            Files.createDirectories(path.getParent());
+            decompressionLogOutput = new DataOutputStream(Files.newOutputStream(path, StandardOpenOption.CREATE, StandardOpenOption.APPEND));
+        }
+
+        decompressionLogOutput.writeLong(timeToDecompress);
+        decompressionLogOutput.writeInt(compressed.length);
+        decompressionLogOutput.writeInt(decompressed.length);
+        decompressionLogOutput.writeChar(';');
     }
 
     @Override
