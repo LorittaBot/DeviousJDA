@@ -307,8 +307,12 @@ public class Requester {
     private void applyHeaders(Request<?> apiRequest, okhttp3.Request.Builder builder) {
         builder.header("user-agent", userAgent)
                 .header("accept-encoding", "gzip")
-                .header("authorization", authConfig.getToken())
                 .header("x-ratelimit-precision", "millisecond"); // still sending this in case of regressions
+
+        // Only add bot token for routes that do use token-based authentication
+        if (apiRequest.getRoute().getBaseRoute().includeTokenInHeader()) {
+            builder.header("authorization", authConfig.getToken());
+        }
 
         // Apply custom headers like X-Audit-Log-Reason
         // If customHeaders is null this does nothing
