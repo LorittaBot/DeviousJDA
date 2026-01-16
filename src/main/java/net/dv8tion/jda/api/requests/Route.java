@@ -335,6 +335,27 @@ public class Route {
         public static final Route GET_GUILD_TEMPLATES = new Route(GET, "guilds/{guild_id}/templates");
     }
 
+    // Looks very nasty because JDA still requires Java 8 support
+    private static final Set<Route> ROUTES_WITHOUT_TOKEN = new HashSet<>(
+            Arrays.asList(
+                    Webhooks.GET_TOKEN_WEBHOOK,
+                    Webhooks.DELETE_TOKEN_WEBHOOK,
+                    Webhooks.MODIFY_TOKEN_WEBHOOK,
+                    Webhooks.EXECUTE_WEBHOOK,
+                    Webhooks.EXECUTE_WEBHOOK_FETCH,
+                    Webhooks.EXECUTE_WEBHOOK_EDIT,
+                    Webhooks.EXECUTE_WEBHOOK_DELETE,
+                    Webhooks.EXECUTE_WEBHOOK_SLACK,
+                    Webhooks.EXECUTE_WEBHOOK_GITHUB,
+
+                    Interactions.CALLBACK,
+                    Interactions.CREATE_FOLLOWUP,
+                    Interactions.EDIT_FOLLOWUP,
+                    Interactions.DELETE_FOLLOWUP,
+                    Interactions.GET_MESSAGE
+            )
+    );
+    
     /**
      * Create a route template for the given HTTP method.
      *
@@ -603,6 +624,15 @@ public class Route {
      */
     public boolean isInteractionBucket() {
         return isInteraction;
+    }
+
+    /**
+     * Whether this route should include the bot token in the authorization header.
+     *
+     * @return True, if this route should include the bot token in the header
+     */
+    public boolean includeTokenInHeader() {
+        return !ROUTES_WITHOUT_TOKEN.contains(this);
     }
 
     /**
