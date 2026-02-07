@@ -25,6 +25,7 @@ import net.dv8tion.jda.internal.entities.UserSnowflakeImpl;
 import net.dv8tion.jda.internal.utils.Checks;
 import net.dv8tion.jda.internal.utils.EntityString;
 import net.dv8tion.jda.internal.utils.Helpers;
+import net.dv8tion.jda.internal.utils.IOUtil;
 import org.jetbrains.annotations.Unmodifiable;
 
 import java.awt.*;
@@ -192,9 +193,14 @@ public interface User extends UserSnowflake {
     @Nullable
     default String getAvatarUrl() {
         String avatarId = getAvatarId();
-        return avatarId == null
-                ? null
-                : String.format(AVATAR_URL, getId(), avatarId, avatarId.startsWith("a_") ? "gif" : "png");
+        if (avatarId == null)
+            return null;
+
+        boolean isAnimated = avatarId.startsWith("a_");
+        String avatarUrl = String.format(AVATAR_URL, getId(), avatarId, avatarId.startsWith("a_") ? "webp" : "png");
+        if (isAnimated)
+            avatarUrl = IOUtil.addQuery(avatarUrl, "animated", "true");
+        return avatarUrl;
     }
 
     /**
