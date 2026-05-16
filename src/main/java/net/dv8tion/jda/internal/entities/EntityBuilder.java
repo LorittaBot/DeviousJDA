@@ -2465,6 +2465,12 @@ public class EntityBuilder extends AbstractEntityBuilder {
             timeCreated = null;
         }
 
+        List<Invite.Role> roles = object.hasKey("roles")
+                ? object.getArray("roles").stream(DataArray::getObject)
+                        .map(InviteImpl.RoleImpl::new)
+                        .collect(Helpers.toUnmodifiableList())
+                : Collections.emptyList();
+
         return new InviteImpl(
                 getJDA(),
                 code,
@@ -2478,6 +2484,7 @@ public class EntityBuilder extends AbstractEntityBuilder {
                 uses,
                 channel,
                 guild,
+                roles,
                 group,
                 target,
                 type);
