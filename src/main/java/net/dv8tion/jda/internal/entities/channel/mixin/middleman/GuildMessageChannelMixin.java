@@ -24,6 +24,7 @@ import net.dv8tion.jda.api.entities.emoji.Emoji;
 import net.dv8tion.jda.api.entities.sticker.StickerSnowflake;
 import net.dv8tion.jda.api.requests.RestAction;
 import net.dv8tion.jda.api.requests.Route;
+import net.dv8tion.jda.api.requests.restaction.AuditableRestAction;
 import net.dv8tion.jda.api.requests.restaction.MessageCreateAction;
 import net.dv8tion.jda.api.utils.MiscUtil;
 import net.dv8tion.jda.api.utils.TimeUtil;
@@ -43,7 +44,7 @@ public interface GuildMessageChannelMixin<T extends GuildMessageChannelMixin<T>>
     @Override
     @Nonnull
     @CheckReturnValue
-    default RestAction<Void> deleteMessagesByIds(@Nonnull Collection<String> messageIds) {
+    default AuditableRestAction<Void> deleteMessagesByIds(@Nonnull Collection<String> messageIds) {
         checkCanAccess();
         checkPermission(
                 Permission.MESSAGE_MANAGE,

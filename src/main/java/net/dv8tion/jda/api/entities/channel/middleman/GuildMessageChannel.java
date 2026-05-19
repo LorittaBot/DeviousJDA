@@ -30,6 +30,7 @@ import net.dv8tion.jda.api.entities.sticker.StickerSnowflake;
 import net.dv8tion.jda.api.exceptions.InsufficientPermissionException;
 import net.dv8tion.jda.api.exceptions.MissingAccessException;
 import net.dv8tion.jda.api.requests.RestAction;
+import net.dv8tion.jda.api.requests.restaction.AuditableRestAction;
 import net.dv8tion.jda.api.requests.restaction.MessageCreateAction;
 import net.dv8tion.jda.internal.utils.Checks;
 
@@ -236,7 +237,7 @@ public interface GuildMessageChannel extends GuildChannel, MessageChannel {
      */
     @Nonnull
     @CheckReturnValue
-    default RestAction<Void> deleteMessages(@Nonnull Collection<Message> messages) {
+    default AuditableRestAction<Void> deleteMessages(@Nonnull Collection<Message> messages) {
         Checks.notEmpty(messages, "Messages collection");
 
         return deleteMessagesByIds(messages.stream().map(ISnowflake::getId).collect(Collectors.toList()));
@@ -292,7 +293,7 @@ public interface GuildMessageChannel extends GuildChannel, MessageChannel {
      */
     @Nonnull
     @CheckReturnValue
-    RestAction<Void> deleteMessagesByIds(@Nonnull Collection<String> messageIds);
+    AuditableRestAction<Void> deleteMessagesByIds(@Nonnull Collection<String> messageIds);
 
     /**
      * Attempts to remove all reactions from a message with the specified {@code messageId} in this TextChannel

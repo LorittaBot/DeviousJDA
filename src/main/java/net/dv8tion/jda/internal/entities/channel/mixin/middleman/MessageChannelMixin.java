@@ -44,6 +44,7 @@ import net.dv8tion.jda.api.utils.messages.MessageEditData;
 import net.dv8tion.jda.api.utils.messages.MessagePollData;
 import net.dv8tion.jda.internal.entities.channel.mixin.ChannelMixin;
 import net.dv8tion.jda.internal.requests.RestActionImpl;
+import net.dv8tion.jda.internal.requests.restaction.AuditableRestActionImpl;
 
 import java.util.*;
 import java.util.concurrent.CompletableFuture;
@@ -380,9 +381,9 @@ public interface MessageChannelMixin<T extends MessageChannelMixin<T>>
     boolean canDeleteOtherUsersMessages();
 
     // ---- Helpers -----
-    default RestActionImpl<Void> bulkDeleteMessages(Collection<String> messageIds) {
+    default AuditableRestActionImpl<Void> bulkDeleteMessages(Collection<String> messageIds) {
         DataObject body = DataObject.empty().put("messages", messageIds);
         Route.CompiledRoute route = Route.Messages.DELETE_MESSAGES.compile(getId());
-        return new RestActionImpl<>(getJDA(), route, body);
+        return new AuditableRestActionImpl<>(getJDA(), route, body);
     }
 }
