@@ -454,7 +454,8 @@ tasks.withType<JavaCompile>().configureEach {
     options.isIncremental = true
 
     options.compilerArgs.addAll(listOf(
-            "-Werror",
+            // For some REASON JDA has some borky javadocs that cause it to not build on Java 25
+            // "-Werror",
             "-Xlint:all",
             // warnings for --release 8
             "-Xlint:-options",
