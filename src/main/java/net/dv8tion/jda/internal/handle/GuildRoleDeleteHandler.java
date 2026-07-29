@@ -16,6 +16,7 @@
 
 package net.dv8tion.jda.internal.handle;
 
+import net.dv8tion.jda.api.entities.Role;
 import net.dv8tion.jda.api.entities.emoji.RichCustomEmoji;
 import net.dv8tion.jda.api.events.role.RoleDeleteEvent;
 import net.dv8tion.jda.api.utils.data.DataObject;
@@ -25,6 +26,9 @@ import net.dv8tion.jda.internal.entities.MemberImpl;
 import net.dv8tion.jda.internal.entities.RoleImpl;
 import net.dv8tion.jda.internal.entities.emoji.RichCustomEmojiImpl;
 import net.dv8tion.jda.internal.requests.WebSocketClient;
+
+import java.util.Collections;
+import java.util.Set;
 
 public class GuildRoleDeleteHandler extends SocketHandler {
     public GuildRoleDeleteHandler(JDAImpl api) {
@@ -66,7 +70,9 @@ public class GuildRoleDeleteHandler extends SocketHandler {
 
         for (RichCustomEmoji emoji : guild.getEmojiCache()) {
             RichCustomEmojiImpl impl = (RichCustomEmojiImpl) emoji;
-            impl.getRoleSet().remove(removedRole);
+            Set<Role> roleSet = impl.getRoleSet();
+            if (roleSet != Collections.EMPTY_SET)
+                roleSet.remove(removedRole);
         }
 
         getJDA().handleEvent(new RoleDeleteEvent(getJDA(), responseNumber, removedRole));

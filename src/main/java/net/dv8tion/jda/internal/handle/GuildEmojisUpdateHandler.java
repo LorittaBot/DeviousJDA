@@ -34,6 +34,7 @@ import net.dv8tion.jda.internal.utils.cache.SnowflakeCacheViewImpl;
 import org.apache.commons.collections4.CollectionUtils;
 
 import java.util.*;
+import java.util.concurrent.ConcurrentHashMap;
 
 public class GuildEmojisUpdateHandler extends SocketHandler {
     public GuildEmojisUpdateHandler(JDAImpl api) {
@@ -89,10 +90,13 @@ public class GuildEmojisUpdateHandler extends SocketHandler {
                 for (int j = 0; j < roles.length(); j++) {
                     Role role = guild.getRoleById(roles.getString(j));
                     if (role != null) {
+                        if (newRoles == Collections.EMPTY_SET)
+                            newRoles = ConcurrentHashMap.newKeySet();
                         newRoles.add(role);
                         oldRoles.remove(role);
                     }
                 }
+                emoji.setRoleSet(newRoles);
 
                 // cleanup old cached roles that were not found in the JSONArray
                 for (Role r : oldRoles) {

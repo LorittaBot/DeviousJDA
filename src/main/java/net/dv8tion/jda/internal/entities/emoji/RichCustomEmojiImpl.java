@@ -48,7 +48,7 @@ import javax.annotation.Nonnull;
 public class RichCustomEmojiImpl implements RichCustomEmoji, EmojiUnion {
     private final long id;
     private final JDAImpl api;
-    private final Set<Role> roles;
+    private volatile Set<Role> roles;
 
     private GuildImpl guild;
     private boolean managed = false;
@@ -61,7 +61,7 @@ public class RichCustomEmojiImpl implements RichCustomEmoji, EmojiUnion {
         this.id = id;
         this.api = guild.getJDA();
         this.guild = guild;
-        this.roles = ConcurrentHashMap.newKeySet();
+        this.roles = Collections.emptySet();
     }
 
     @Nonnull
@@ -237,6 +237,10 @@ public class RichCustomEmojiImpl implements RichCustomEmoji, EmojiUnion {
         return this.roles;
     }
 
+    public void setRoleSet(Set<Role> roles) {
+        this.roles = roles;
+    }
+
     // -- Object overrides --
 
     @Override
@@ -268,7 +272,11 @@ public class RichCustomEmojiImpl implements RichCustomEmoji, EmojiUnion {
                 .setManaged(managed)
                 .setAnimated(animated)
                 .setName(name);
-        copy.roles.addAll(roles);
+        if (!roles.isEmpty()) {
+            Set<Role> roleSet = ConcurrentHashMap.newKeySet(roles.size());
+            roleSet.addAll(this.roles);
+            copy.roles = roleSet;
+        }
         return copy;
     }
 

@@ -90,6 +90,7 @@ import java.time.OffsetDateTime;
 import java.time.format.DateTimeFormatter;
 import java.time.temporal.TemporalAccessor;
 import java.util.*;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.function.Function;
 import java.util.function.UnaryOperator;
 import java.util.stream.Collectors;
@@ -1044,9 +1045,12 @@ public class EntityBuilder extends AbstractEntityBuilder {
         for (int j = 0; j < emojiRoles.length(); j++) {
             Role role = guildObj.getRoleById(emojiRoles.getString(j));
             if (role != null) {
+                if (roleSet == Collections.EMPTY_SET)
+                    roleSet = ConcurrentHashMap.newKeySet();
                 roleSet.add(role);
             }
         }
+        emojiObj.setRoleSet(roleSet);
         if (user != null) {
             emojiObj.setOwner(user);
         }
