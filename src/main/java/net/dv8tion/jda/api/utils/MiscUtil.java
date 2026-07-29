@@ -104,7 +104,7 @@ public class MiscUtil {
      */
     @Nonnull
     public static <T> TLongObjectMap<T> newLongMap(int initialCapacity) {
-        return new TSynchronizedLongObjectMap<>(new TLongObjectHashMap<T>(initialCapacity), new Object());
+        return new TSynchronizedLongObjectMap<>(new TLongObjectHashMap<T>(initialCapacity));
     }
 
     /**
@@ -117,7 +117,7 @@ public class MiscUtil {
      */
     @Nonnull
     public static <T> TLongObjectMap<T> newLongMap() {
-        return new TSynchronizedLongObjectMap<>(new TLongObjectHashMap<T>(), new Object());
+        return new TSynchronizedLongObjectMap<>(new TLongObjectHashMap<T>());
     }
 
     public static long parseLong(@Nonnull String input) {
