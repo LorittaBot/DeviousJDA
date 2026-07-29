@@ -39,7 +39,6 @@ import javax.annotation.Nonnull;
 
 public abstract class AbstractCacheView<T> extends ReadWriteLockCache<T> implements CacheView<T> {
     protected final TLongObjectMap<T> elements = new TLongObjectHashMap<>();
-    protected final T[] emptyArray;
     protected final Function<T, String> nameMapper;
     protected final Class<T> type;
 
@@ -47,7 +46,6 @@ public abstract class AbstractCacheView<T> extends ReadWriteLockCache<T> impleme
     protected AbstractCacheView(Class<T> type, Function<T, String> nameMapper) {
         this.nameMapper = nameMapper;
         this.type = type;
-        this.emptyArray = (T[]) Array.newInstance(type, 0);
     }
 
     public void clear() {
@@ -195,7 +193,9 @@ public abstract class AbstractCacheView<T> extends ReadWriteLockCache<T> impleme
     @Override
     public Iterator<T> iterator() {
         try (UnlockHook hook = readLock()) {
-            return new ObjectArrayIterator<>(elements.values(emptyArray));
+            if (elements.isEmpty())
+                return Collections.emptyIterator();
+            return new ObjectArrayIterator<>(elements.values((T[]) Array.newInstance(type, elements.size())));
         }
     }
 

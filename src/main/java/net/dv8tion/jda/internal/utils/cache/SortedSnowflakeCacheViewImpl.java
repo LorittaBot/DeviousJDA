@@ -21,6 +21,7 @@ import net.dv8tion.jda.api.utils.cache.SortedSnowflakeCacheView;
 import net.dv8tion.jda.internal.utils.UnlockHook;
 import org.apache.commons.collections4.iterators.ObjectArrayIterator;
 
+import java.lang.reflect.Array;
 import java.util.*;
 import java.util.function.Consumer;
 import java.util.function.Function;
@@ -134,7 +135,9 @@ public class SortedSnowflakeCacheViewImpl<T extends ISnowflake & Comparable<? su
     @Override
     public Iterator<T> iterator() {
         try (UnlockHook hook = readLock()) {
-            T[] arr = elements.values(emptyArray);
+            if (elements.isEmpty())
+                return Collections.emptyIterator();
+            T[] arr = elements.values((T[]) Array.newInstance(type, elements.size()));
             Arrays.sort(arr, comparator);
             return new ObjectArrayIterator<>(arr);
         }
