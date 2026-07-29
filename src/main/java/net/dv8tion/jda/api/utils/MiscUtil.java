@@ -95,6 +95,21 @@ public class MiscUtil {
     /**
      * Generates a new thread-safe {@link gnu.trove.map.TLongObjectMap TLongObjectMap}
      *
+     * @param  initialCapacity
+     *         The initial capacity of the map
+     * @param  <T>
+     *         The Object type
+     *
+     * @return a new thread-safe {@link gnu.trove.map.TLongObjectMap TLongObjectMap}
+     */
+    @Nonnull
+    public static <T> TLongObjectMap<T> newLongMap(int initialCapacity) {
+        return new TSynchronizedLongObjectMap<>(new TLongObjectHashMap<T>(initialCapacity), new Object());
+    }
+
+    /**
+     * Generates a new thread-safe {@link gnu.trove.map.TLongObjectMap TLongObjectMap}
+     *
      * @param  <T>
      *         The Object type
      *

@@ -38,7 +38,7 @@ import java.util.stream.StreamSupport;
 import javax.annotation.Nonnull;
 
 public abstract class AbstractCacheView<T> extends ReadWriteLockCache<T> implements CacheView<T> {
-    protected final TLongObjectMap<T> elements = new TLongObjectHashMap<>();
+    protected final TLongObjectMap<T> elements = new TLongObjectHashMap<>(0);
     protected final Function<T, String> nameMapper;
     protected final Class<T> type;
 

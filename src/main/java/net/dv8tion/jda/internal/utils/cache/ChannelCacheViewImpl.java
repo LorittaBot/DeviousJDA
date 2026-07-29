@@ -46,7 +46,7 @@ public class ChannelCacheViewImpl<T extends Channel> extends ReadWriteLockCache<
             channelType = normalizeKey(channelType);
             Class<? extends Channel> clazz = channelType.getInterface();
             if (channelType != ChannelType.UNKNOWN && type.isAssignableFrom(clazz)) {
-                caches.put(channelType, new TLongObjectHashMap<>());
+                caches.put(channelType, new TLongObjectHashMap<>(0));
             }
         }
     }

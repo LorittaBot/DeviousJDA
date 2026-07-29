@@ -36,7 +36,7 @@ import javax.annotation.Nonnull;
 
 public class CategoryImpl extends AbstractGuildChannelImpl<CategoryImpl>
         implements Category, CategoryMixin<CategoryImpl> {
-    private final TLongObjectMap<PermissionOverride> overrides = MiscUtil.newLongMap();
+    private final TLongObjectMap<PermissionOverride> overrides = MiscUtil.newLongMap(0);
 
     private int position;
 

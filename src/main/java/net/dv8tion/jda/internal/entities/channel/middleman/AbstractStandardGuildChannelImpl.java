@@ -25,7 +25,7 @@ import net.dv8tion.jda.internal.entities.channel.mixin.middleman.StandardGuildCh
 
 public abstract class AbstractStandardGuildChannelImpl<T extends AbstractStandardGuildChannelImpl<T>>
         extends AbstractGuildChannelImpl<T> implements StandardGuildChannelMixin<T> {
-    protected final TLongObjectMap<PermissionOverride> overrides = MiscUtil.newLongMap();
+    protected final TLongObjectMap<PermissionOverride> overrides = MiscUtil.newLongMap(0);
 
     protected long parentCategoryId;
     protected int position;

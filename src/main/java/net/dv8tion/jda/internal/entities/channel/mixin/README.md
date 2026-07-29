@@ -111,7 +111,7 @@ shows the expected State Accessor declaration.
 
 This is what would be expected to be implemented by the concrete channel type that uses the `IPermissionContainerMixin`
 ```java
-TLongObjectMap<PermissionOverride> overrides = MiscUtil.newLongMap();
+TLongObjectMap<PermissionOverride> overrides = MiscUtil.newLongMap(0);
 
 @Override
 public TLongObjectMap<PermissionOverride> getPermissionOverrideMap() {

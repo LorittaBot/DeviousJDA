@@ -45,7 +45,7 @@ import javax.annotation.Nonnull;
 
 public class MediaChannelImpl extends AbstractGuildChannelImpl<MediaChannelImpl>
         implements MediaChannel, GuildChannelUnion, MediaChannelMixin<MediaChannelImpl> {
-    private final TLongObjectMap<PermissionOverride> overrides = MiscUtil.newLongMap();
+    private final TLongObjectMap<PermissionOverride> overrides = MiscUtil.newLongMap(0);
     private final SortedSnowflakeCacheViewImpl<ForumTag> tagCache =
             new SortedSnowflakeCacheViewImpl<>(ForumTag.class, ForumTag::getName, Comparator.naturalOrder());
 
